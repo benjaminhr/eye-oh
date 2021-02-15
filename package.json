@@ -11,7 +11,7 @@
     "pkg": "^4.4.9"
   },
   "scripts": {
-    "package": "pkg . --out-path dist"
+    "package": "pkg . --out-path dist && mv dist/eye-oh-macos dist/eye-oh"
   },
   "keywords": [],
   "author": "",
