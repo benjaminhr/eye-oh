@@ -66,12 +66,6 @@ void ODummy() {
       
     </location>
 
-    <location id="q3" x="0" y="0">
-      <name >q3</name>
-      
-      
-    </location>
-
     <location id="p3" x="0" y="0">
       <name >p3</name>
       
@@ -345,7 +339,7 @@ void ODummy() {
       <target ref="sink" />
       
       
-      <label kind="synchronisation">ISend(p0,p1)</label>
+      <label kind="synchronisation">ISend(x0,x1)</label>
       
       
     </transition>
@@ -355,7 +349,7 @@ void ODummy() {
       <target ref="sink" />
       
       
-      <label kind="synchronisation">IReceive(p0,p1)</label>
+      <label kind="synchronisation">IReceive(x0,x1)</label>
       
       
     </transition>
@@ -375,7 +369,7 @@ void ODummy() {
       <target ref="sink" />
       
       
-      <label kind="synchronisation">IDummy(p0)</label>
+      <label kind="synchronisation">IDummy(x0)</label>
       
       
     </transition>

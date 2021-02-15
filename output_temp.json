@@ -1,1 +1,464 @@
-Wrote new model: test_models/output.register.xml
+undefined
+undefined
+undefined
+undefined
+{
+  "register-automaton": {
+    "_": "\n  // P = vx.a!(x).0 | a?(z).0\n  \n\n  \n\n  \n\n  \n\n",
+    "alphabet": [
+      {
+        "inputs": [
+          {
+            "symbol": [
+              {
+                "$": {
+                  "name": "ISend"
+                },
+                "param": [
+                  {
+                    "$": {
+                      "name": "p0",
+                      "type": "int"
+                    }
+                  },
+                  {
+                    "$": {
+                      "name": "p1",
+                      "type": "int"
+                    }
+                  }
+                ]
+              },
+              {
+                "$": {
+                  "name": "IReceive"
+                },
+                "param": [
+                  {
+                    "$": {
+                      "name": "p0",
+                      "type": "int"
+                    }
+                  },
+                  {
+                    "$": {
+                      "name": "p1",
+                      "type": "int"
+                    }
+                  }
+                ]
+              },
+              {
+                "$": {
+                  "name": "ITau"
+                }
+              },
+              {
+                "$": {
+                  "name": "IDummy"
+                },
+                "param": [
+                  {
+                    "$": {
+                      "name": "p0",
+                      "type": "int"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "symbol": [
+              {
+                "$": {
+                  "name": "OOK"
+                }
+              },
+              {
+                "$": {
+                  "name": "OFINAL"
+                }
+              },
+              {
+                "$": {
+                  "name": "ODummy"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "globals": [
+      {
+        "variable": [
+          {
+            "_": "0",
+            "$": {
+              "type": "int",
+              "name": "r1"
+            }
+          },
+          {
+            "_": "0",
+            "$": {
+              "type": "int",
+              "name": "r2"
+            }
+          }
+        ]
+      }
+    ],
+    "locations": [
+      {
+        "location": [
+          {
+            "$": {
+              "name": "s0",
+              "initial": "true"
+            }
+          },
+          {
+            "$": {
+              "name": "s1"
+            }
+          },
+          {
+            "$": {
+              "name": "q0"
+            }
+          },
+          {
+            "$": {
+              "name": "p1"
+            }
+          },
+          {
+            "$": {
+              "name": "q1"
+            }
+          },
+          {
+            "$": {
+              "name": "p2"
+            }
+          },
+          {
+            "$": {
+              "name": "q2"
+            }
+          },
+          {
+            "$": {
+              "name": "q3",
+              "final": "true"
+            }
+          },
+          {
+            "$": {
+              "name": "p3"
+            }
+          },
+          {
+            "$": {
+              "name": "sink"
+            }
+          },
+          {
+            "$": {
+              "name": "sink_two"
+            }
+          }
+        ]
+      }
+    ],
+    "transitions": [
+      {
+        "transition": [
+          {
+            "$": {
+              "from": "s0",
+              "to": "s1",
+              "symbol": "IDummy",
+              "params": "x1"
+            },
+            "assignments": [
+              {
+                "assign": [
+                  {
+                    "_": "x1",
+                    "$": {
+                      "to": "r1"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "$": {
+              "from": "s1",
+              "to": "q0",
+              "symbol": "OOK"
+            }
+          },
+          {
+            "$": {
+              "from": "q0",
+              "to": "p1",
+              "symbol": "ISend",
+              "params": "x1,x2"
+            },
+            "guard": [
+              "r1==x1 && r1!=x2\n      "
+            ],
+            "assignments": [
+              {
+                "assign": [
+                  {
+                    "_": "x2",
+                    "$": {
+                      "to": "r2"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "$": {
+              "from": "q1",
+              "to": "p3",
+              "symbol": "IReceive",
+              "params": "x1,x2"
+            },
+            "guard": [
+              "r1==x1\n      "
+            ]
+          },
+          {
+            "$": {
+              "from": "q0",
+              "to": "p2",
+              "symbol": "IReceive",
+              "params": "x1,x2"
+            },
+            "guard": [
+              "r1==x1\n      "
+            ],
+            "assignments": [
+              {
+                "assign": [
+                  {
+                    "_": "x2",
+                    "$": {
+                      "to": "r2"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "$": {
+              "from": "q2",
+              "to": "p3",
+              "symbol": "ISend",
+              "params": "x1,x2"
+            },
+            "guard": [
+              "r1==x1 && (r1!=x2 && r2!=x2)\n      "
+            ]
+          },
+          {
+            "$": {
+              "from": "q0",
+              "to": "p3",
+              "symbol": "ITau"
+            }
+          },
+          {
+            "$": {
+              "from": "p1",
+              "to": "q1",
+              "symbol": "OOK"
+            }
+          },
+          {
+            "$": {
+              "from": "p2",
+              "to": "q2",
+              "symbol": "OOK"
+            }
+          },
+          {
+            "$": {
+              "from": "p3",
+              "to": "sink_two",
+              "symbol": "OFINAL"
+            }
+          },
+          {
+            "$": {
+              "from": "s0",
+              "to": "sink",
+              "symbol": "ISend",
+              "params": "x0,x1"
+            }
+          },
+          {
+            "$": {
+              "from": "s0",
+              "to": "sink",
+              "symbol": "IReceive",
+              "params": "x0,x1"
+            }
+          },
+          {
+            "$": {
+              "from": "s0",
+              "to": "sink",
+              "symbol": "ITau"
+            }
+          },
+          {
+            "$": {
+              "from": "q0",
+              "to": "sink",
+              "symbol": "ISend",
+              "params": "x0,x1"
+            },
+            "guard": [
+              "r1!=x1 || r1==x2\n      "
+            ]
+          },
+          {
+            "$": {
+              "from": "q0",
+              "to": "sink",
+              "symbol": "IReceive",
+              "params": "x0,x1"
+            },
+            "guard": [
+              "r1!=x1\n      "
+            ]
+          },
+          {
+            "$": {
+              "from": "q0",
+              "to": "sink",
+              "symbol": "IDummy",
+              "params": "x0"
+            }
+          },
+          {
+            "$": {
+              "from": "q1",
+              "to": "sink",
+              "symbol": "ISend",
+              "params": "x0,x1"
+            }
+          },
+          {
+            "$": {
+              "from": "q1",
+              "to": "sink",
+              "symbol": "IReceive",
+              "params": "x0,x1"
+            },
+            "guard": [
+              "r1!=x1\n      "
+            ]
+          },
+          {
+            "$": {
+              "from": "q1",
+              "to": "sink",
+              "symbol": "ITau"
+            }
+          },
+          {
+            "$": {
+              "from": "q1",
+              "to": "sink",
+              "symbol": "IDummy",
+              "params": "x0"
+            }
+          },
+          {
+            "$": {
+              "from": "q2",
+              "to": "sink",
+              "symbol": "ISend",
+              "params": "x0,x1"
+            },
+            "guard": [
+              "r1!=x1 || (r1==x2 || r2==x2)\n      "
+            ]
+          },
+          {
+            "$": {
+              "from": "q2",
+              "to": "sink",
+              "symbol": "IReceive",
+              "params": "x0,x1"
+            }
+          },
+          {
+            "$": {
+              "from": "q2",
+              "to": "sink",
+              "symbol": "ITau"
+            }
+          },
+          {
+            "$": {
+              "from": "q2",
+              "to": "sink",
+              "symbol": "IDummy",
+              "params": "x0"
+            }
+          },
+          {
+            "$": {
+              "from": "sink_two",
+              "to": "sink",
+              "symbol": "ISend"
+            }
+          },
+          {
+            "$": {
+              "from": "sink_two",
+              "to": "sink",
+              "symbol": "IReceive"
+            }
+          },
+          {
+            "$": {
+              "from": "sink_two",
+              "to": "sink",
+              "symbol": "ITau"
+            }
+          },
+          {
+            "$": {
+              "from": "sink_two",
+              "to": "sink",
+              "symbol": "IDummy"
+            }
+          },
+          {
+            "$": {
+              "from": "sink",
+              "to": "sink_two",
+              "symbol": "ODummy"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

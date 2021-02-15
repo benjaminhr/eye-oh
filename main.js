@@ -141,6 +141,11 @@ fs.readFile(inputModelPath, "utf-8", (err, data) => {
     // point second last state to sink_two with OFinal transition
     transitions[oFinalTransitionIndex].to = "sink_two";
 
+    // remove old final state
+    json["register-automaton"].locations[0].location = json[
+      "register-automaton"
+    ].locations[0].location.filter((loc) => loc["$"].name != finalState);
+
     // add all input transitions from sink_two to sink
     inputSymbols.forEach((symbol) => {
       const newTransition = {
@@ -148,6 +153,10 @@ fs.readFile(inputModelPath, "utf-8", (err, data) => {
         to: "sink",
         symbol: symbol.name,
         assignments: [],
+        params: symbol.param
+          .map((o) => o.name)
+          .join(",")
+          .replaceAll("p", "x"),
         guard: "",
       };
 

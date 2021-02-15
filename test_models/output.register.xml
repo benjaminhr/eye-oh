@@ -44,7 +44,6 @@
     <location name="q1"/>
     <location name="p2"/>
     <location name="q2"/>
-    <location name="q3" final="true"/>
     <location name="p3"/>
     <location name="sink"/>
     <location name="sink_two"/>
@@ -108,10 +107,10 @@
     <transition from="q2" to="sink" symbol="IReceive" params="x0,x1"/>
     <transition from="q2" to="sink" symbol="ITau"/>
     <transition from="q2" to="sink" symbol="IDummy" params="x0"/>
-    <transition from="sink_two" to="sink" symbol="ISend"/>
-    <transition from="sink_two" to="sink" symbol="IReceive"/>
+    <transition from="sink_two" to="sink" symbol="ISend" params="x0,x1"/>
+    <transition from="sink_two" to="sink" symbol="IReceive" params="x0,x1"/>
     <transition from="sink_two" to="sink" symbol="ITau"/>
-    <transition from="sink_two" to="sink" symbol="IDummy"/>
+    <transition from="sink_two" to="sink" symbol="IDummy" params="x0"/>
     <transition from="sink" to="sink_two" symbol="ODummy"/>
   </transitions>
 </register-automaton>
