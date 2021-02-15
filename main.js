@@ -129,7 +129,13 @@ fs.readFile(inputModelPath, "utf-8", (err, data) => {
     }
 
     // remove final state
-    const finalState = locations.find((l) => l.final).name;
+    const finalState = (locations.find((l) => l.final) || {}).name;
+
+    if (!finalState) {
+      console.log('Remember to add `final="true" on your final location/state');
+      process.exit(1);
+    }
+
     const oFinalTransitionIndex = transitions.findIndex(
       (tran) => tran.to === finalState
     );
