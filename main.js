@@ -2,15 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const xml2js = require("xml2js");
 const builder = new xml2js.Builder();
+
+// `pkg` doesn't support node@15 yet, polyfill .flatMap and .replaceAll
 require("./polyfills");
-
-/*
-
-  - initial state must have `initial="true"`
-  - final state must have `final="true"`
-  - relies on input transitions starting with I, output with O (as does Tomte)
-  - relies on the final state having a single incoming OFINAL transition
-*/
 
 const inputModelName = process.argv[2];
 const outputModelName = process.argv[3];
