@@ -1,0 +1,151 @@
+{
+  "inputSymbols": [
+    {
+      "name": "ISend",
+      "params": [
+        {
+          "name": "p0",
+          "type": "int"
+        },
+        {
+          "name": "p1",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "IReceive",
+      "params": [
+        {
+          "name": "p0",
+          "type": "int"
+        },
+        {
+          "name": "p1",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "ITau",
+      "params": []
+    },
+    {
+      "name": "IDummy",
+      "params": [
+        {
+          "name": "p0",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "outputSymbols": [
+    {
+      "symbol": "OOK",
+      "params": []
+    },
+    {
+      "symbol": "OFINAL",
+      "params": []
+    }
+  ],
+  "locations": [
+    "s0",
+    "s1",
+    "q0",
+    "p1",
+    "q1",
+    "p2",
+    "q2",
+    "q3",
+    "p3"
+  ],
+  "transitions": [
+    {
+      "from": "s0",
+      "to": "s1",
+      "symbol": "IDummy",
+      "assignments": [
+        {
+          "reg": "x1",
+          "to": "r1"
+        }
+      ],
+      "guard": ""
+    },
+    {
+      "from": "s1",
+      "to": "q0",
+      "symbol": "OOK",
+      "assignments": [],
+      "guard": ""
+    },
+    {
+      "from": "q0",
+      "to": "p1",
+      "symbol": "ISend",
+      "assignments": [
+        {
+          "reg": "x2",
+          "to": "r2"
+        }
+      ],
+      "guard": "r1==x1 && r1!=x2"
+    },
+    {
+      "from": "q1",
+      "to": "p3",
+      "symbol": "IReceive",
+      "assignments": [],
+      "guard": "r1==x1"
+    },
+    {
+      "from": "q0",
+      "to": "p2",
+      "symbol": "IReceive",
+      "assignments": [
+        {
+          "reg": "x2",
+          "to": "r2"
+        }
+      ],
+      "guard": "r1==x1"
+    },
+    {
+      "from": "q2",
+      "to": "p3",
+      "symbol": "ISend",
+      "assignments": [],
+      "guard": "r1==x1 && (r1!=x2 && r2!=x2)"
+    },
+    {
+      "from": "q0",
+      "to": "p3",
+      "symbol": "ITau",
+      "assignments": [],
+      "guard": ""
+    },
+    {
+      "from": "p1",
+      "to": "q1",
+      "symbol": "OOK",
+      "assignments": [],
+      "guard": ""
+    },
+    {
+      "from": "p2",
+      "to": "q2",
+      "symbol": "OOK",
+      "assignments": [],
+      "guard": ""
+    },
+    {
+      "from": "p3",
+      "to": "q3",
+      "symbol": "OFINAL",
+      "assignments": [],
+      "guard": ""
+    }
+  ]
+}

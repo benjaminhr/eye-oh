@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC "-//Uppaal Team//DTD Flat System 1.1//EN" "lib/flat-1_1.dtd">
+<nta>
+  <declaration>
+int r1 = 0;
+int r2 = 0;
+void ISend(int p0, int p1) {
+}
+void IReceive(int p0, int p1) {
+}
+void ITau() {
+}
+void IDummy(int p0) {
+}
+void OOK() {
+}
+void OFINAL() {
+}
+void ODummy() {
+}
+</declaration>
+    <template>
+    <name x="5" y="5">Template</name>
+    
+    <declaration></declaration>
+    
+    <location id="s0" x="0" y="0">
+      <name >s0</name>
+      
+      
+    </location>
+
+    <location id="s1" x="0" y="0">
+      <name >s1</name>
+      
+      
+    </location>
+
+    <location id="q0" x="0" y="0">
+      <name >q0</name>
+      
+      
+    </location>
+
+    <location id="p1" x="0" y="0">
+      <name >p1</name>
+      
+      
+    </location>
+
+    <location id="q1" x="0" y="0">
+      <name >q1</name>
+      
+      
+    </location>
+
+    <location id="p2" x="0" y="0">
+      <name >p2</name>
+      
+      
+    </location>
+
+    <location id="q2" x="0" y="0">
+      <name >q2</name>
+      
+      
+    </location>
+
+    <location id="q3" x="0" y="0">
+      <name >q3</name>
+      
+      
+    </location>
+
+    <location id="p3" x="0" y="0">
+      <name >p3</name>
+      
+      
+    </location>
+
+    <location id="sink" x="0" y="0">
+      <name >sink</name>
+      
+      
+    </location>
+
+    <location id="sink_two" x="0" y="0">
+      <name >sink_two</name>
+      
+      
+    </location>
+    
+    <init ref="s0" />
+    
+    <transition>
+      <source ref="s0" />
+      <target ref="s1" />
+      
+      
+      <label kind="synchronisation">IDummy(x1)</label>
+      <label kind="assignment">r1=x1;</label>
+      
+    </transition>
+
+    <transition>
+      <source ref="s1" />
+      <target ref="q0" />
+      
+      
+      <label kind="synchronisation">OOK()</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q0" />
+      <target ref="p1" />
+      
+      <label kind="guard">r1==x1 &amp;&amp; r1!=x2
+      </label>
+      <label kind="synchronisation">ISend(x1,x2)</label>
+      <label kind="assignment">r2=x2;</label>
+      
+    </transition>
+
+    <transition>
+      <source ref="q1" />
+      <target ref="p3" />
+      
+      <label kind="guard">r1==x1
+      </label>
+      <label kind="synchronisation">IReceive(x1,x2)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q0" />
+      <target ref="p2" />
+      
+      <label kind="guard">r1==x1
+      </label>
+      <label kind="synchronisation">IReceive(x1,x2)</label>
+      <label kind="assignment">r2=x2;</label>
+      
+    </transition>
+
+    <transition>
+      <source ref="q2" />
+      <target ref="p3" />
+      
+      <label kind="guard">r1==x1 &amp;&amp; (r1!=x2 &amp;&amp; r2!=x2)
+      </label>
+      <label kind="synchronisation">ISend(x1,x2)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q0" />
+      <target ref="p3" />
+      
+      
+      <label kind="synchronisation">ITau()</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="p1" />
+      <target ref="q1" />
+      
+      
+      <label kind="synchronisation">OOK()</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="p2" />
+      <target ref="q2" />
+      
+      
+      <label kind="synchronisation">OOK()</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="p3" />
+      <target ref="sink_two" />
+      
+      
+      <label kind="synchronisation">OFINAL()</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="s0" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">ISend(x0,x1)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="s0" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">IReceive(x0,x1)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="s0" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">ITau()</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q0" />
+      <target ref="sink" />
+      
+      <label kind="guard">r1!=x1 || r1==x2
+      </label>
+      <label kind="synchronisation">ISend(x0,x1)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q0" />
+      <target ref="sink" />
+      
+      <label kind="guard">r1!=x1
+      </label>
+      <label kind="synchronisation">IReceive(x0,x1)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q0" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">IDummy(x0)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q1" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">ISend(x0,x1)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q1" />
+      <target ref="sink" />
+      
+      <label kind="guard">r1!=x1
+      </label>
+      <label kind="synchronisation">IReceive(x0,x1)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q1" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">ITau()</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q1" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">IDummy(x0)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q2" />
+      <target ref="sink" />
+      
+      <label kind="guard">r1!=x1 || (r1==x2 || r2==x2)
+      </label>
+      <label kind="synchronisation">ISend(x0,x1)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q2" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">IReceive(x0,x1)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q2" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">ITau()</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="q2" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">IDummy(x0)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="sink_two" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">ISend(p0,p1)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="sink_two" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">IReceive(p0,p1)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="sink_two" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">ITau()</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="sink_two" />
+      <target ref="sink" />
+      
+      
+      <label kind="synchronisation">IDummy(p0)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="sink" />
+      <target ref="sink_two" />
+      
+      
+      <label kind="synchronisation">ODummy()</label>
+      
+      
+    </transition>
+  </template>
+
+  <system>Process = Template();system Process;</system>
+</nta>
