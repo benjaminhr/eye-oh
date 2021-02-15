@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const xml2js = require("xml2js");
 const builder = new xml2js.Builder();
+require("./polyfills");
 
 /*
 
