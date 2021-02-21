@@ -1,5 +1,7 @@
+const path = require("path");
 const fs = require("fs");
 const xml2js = require("xml2js");
+const builder = new xml2js.Builder();
 
 // POLYFILL: `pkg` doesn't support node@15 yet, polyfill .flatMap and .replaceAll
 String.prototype.replaceAll = function (a, b) {
@@ -42,7 +44,13 @@ async function getRegisterXML(path) {
   }
 }
 
+function writeModel(path, JSONModel) {
+  const xml = builder.buildObject(JSONModel);
+  const fileContents = fs.writeFileSync(path, xml, "utf-8");
+}
+
 module.exports = {
   getRegisterXML,
   parseString,
+  writeModel,
 };
