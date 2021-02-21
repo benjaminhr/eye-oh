@@ -44,7 +44,7 @@
     <location name="q1"/>
     <location name="p2"/>
     <location name="q2"/>
-    <location name="q3"/>
+    <location name="p3"/>
     <location name="sink"/>
     <location name="sink_two"/>
   </locations>
@@ -62,7 +62,7 @@
         <assign to="r2">x2</assign>
       </assignments>
     </transition>
-    <transition from="q1" to="sink_two" symbol="IReceive" params="x1,x2">
+    <transition from="q1" to="p3" symbol="IReceive" params="x1,x2">
       <guard>r1==x1
       </guard>
     </transition>
@@ -80,37 +80,37 @@
     <transition from="q0" to="p3" symbol="ITau"/>
     <transition from="p1" to="q1" symbol="OOK"/>
     <transition from="p2" to="q2" symbol="OOK"/>
-    <transition from="p3" to="q3" symbol="OFINAL"/>
-    <transition from="s0" to="sink" symbol="ISend" params="x0,x1"/>
-    <transition from="s0" to="sink" symbol="IReceive" params="x0,x1"/>
+    <transition from="p3" to="sink_two" symbol="OFINAL"/>
+    <transition from="s0" to="sink" symbol="ISend" params="x1,x2"/>
+    <transition from="s0" to="sink" symbol="IReceive" params="x1,x2"/>
     <transition from="s0" to="sink" symbol="ITau"/>
-    <transition from="q0" to="sink" symbol="ISend" params="x0,x1">
+    <transition from="q0" to="sink" symbol="ISend" params="x1,x2">
       <guard>r1!=x1 || r1==x2
       </guard>
     </transition>
-    <transition from="q0" to="sink" symbol="IReceive" params="x0,x1">
+    <transition from="q0" to="sink" symbol="IReceive" params="x1,x2">
       <guard>r1!=x1
       </guard>
     </transition>
-    <transition from="q0" to="sink" symbol="IDummy" params="x0"/>
-    <transition from="q1" to="sink" symbol="ISend" params="x0,x1"/>
-    <transition from="q1" to="sink" symbol="IReceive" params="x0,x1">
+    <transition from="q0" to="sink" symbol="IDummy" params="x1"/>
+    <transition from="q1" to="sink" symbol="ISend" params="x1,x2"/>
+    <transition from="q1" to="sink" symbol="IReceive" params="x1,x2">
       <guard>r1!=x1
       </guard>
     </transition>
     <transition from="q1" to="sink" symbol="ITau"/>
-    <transition from="q1" to="sink" symbol="IDummy" params="x0"/>
-    <transition from="q2" to="sink" symbol="ISend" params="x0,x1">
+    <transition from="q1" to="sink" symbol="IDummy" params="x1"/>
+    <transition from="q2" to="sink" symbol="ISend" params="x1,x2">
       <guard>r1!=x1 || (r1==x2 || r2==x2)
       </guard>
     </transition>
-    <transition from="q2" to="sink" symbol="IReceive" params="x0,x1"/>
+    <transition from="q2" to="sink" symbol="IReceive" params="x1,x2"/>
     <transition from="q2" to="sink" symbol="ITau"/>
-    <transition from="q2" to="sink" symbol="IDummy" params="x0"/>
-    <transition from="sink_two" to="sink" symbol="ISend" params="x0,x1"/>
-    <transition from="sink_two" to="sink" symbol="IReceive" params="x0,x1"/>
+    <transition from="q2" to="sink" symbol="IDummy" params="x1"/>
+    <transition from="sink_two" to="sink" symbol="ISend" params="x1,x2"/>
+    <transition from="sink_two" to="sink" symbol="IReceive" params="x1,x2"/>
     <transition from="sink_two" to="sink" symbol="ITau"/>
-    <transition from="sink_two" to="sink" symbol="IDummy" params="x0"/>
+    <transition from="sink_two" to="sink" symbol="IDummy" params="x1"/>
     <transition from="sink" to="sink_two" symbol="ODummy"/>
   </transitions>
 </register-automaton>

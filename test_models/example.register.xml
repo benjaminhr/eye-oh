@@ -37,7 +37,7 @@
     <location name="q1" />
     <location name="p2" />
     <location name="q2" />
-    <location name="q3" />
+    <location name="q3" final="true" />
     <location name="p3" />
   </locations>
 

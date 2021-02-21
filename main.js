@@ -97,10 +97,8 @@ fs.readFile(inputModelPath, "utf-8", (err, data) => {
           to: "sink",
           symbol: missingTransition.name,
           assignments: [],
-          params: missingTransition.param
-            .map((o) => o.name)
-            .join(",")
-            .replaceAll("p", "x"),
+          // params for sink state transitions "x0,...,xN"
+          params: missingTransition.param.map((_, i) => `x${i + 1}`).join(","),
           guard: "",
         };
 
@@ -154,10 +152,8 @@ fs.readFile(inputModelPath, "utf-8", (err, data) => {
         to: "sink",
         symbol: symbol.name,
         assignments: [],
-        params: symbol.param
-          .map((o) => o.name)
-          .join(",")
-          .replaceAll("p", "x"),
+        // params for sink state transitions "x0,...,xN"
+        params: symbol.param.map((_, i) => `x${i + 1}`).join(","),
         guard: "",
       };
 
