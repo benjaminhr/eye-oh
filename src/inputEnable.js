@@ -87,9 +87,6 @@ function inputEnable(registerAutomaton) {
 
   // remove old final state
   locations = locations.filter((loc) => loc.name != finalState);
-  // json["register-automaton"].locations[0].location = json[
-  //   "register-automaton"
-  // ].locations[0].location.filter((loc) => loc["$"].name != finalState);
 
   // add all input transitions from sink_two to sink
   inputSymbols.forEach((symbol) => {
@@ -114,75 +111,16 @@ function inputEnable(registerAutomaton) {
     assignments: [],
     guard: "",
   };
-
   newTransitions.push(newTransition);
 
+  const newTransitionsXML = [...transitions, ...newTransitions];
+  XMLHelpers.write.transitions(registerAutomaton, newTransitionsXML);
   XMLHelpers.write.symbols(registerAutomaton, "outputs", ["ODummy"]);
-
-  // json["register-automaton"].alphabet[0].outputs[0].symbol.push({
-  //   $: {
-  //     name: "ODummy",
-  //   },
-  // });
-
   XMLHelpers.write.locations(registerAutomaton, [
     ...locations,
     { name: "sink" },
     { name: "sink_two" },
   ]);
-
-  // json["register-automaton"].locations[0].location.push({
-  //   $: {
-  //     name: "sink",
-  //   },
-  // });
-
-  // json["register-automaton"].locations[0].location.push({
-  //   $: {
-  //     name: "sink_two",
-  //   },
-  // });
-
-  // map back to XML json format
-
-  const newTransitionsXML = [...transitions, ...newTransitions];
-  XMLHelpers.write.transitions(registerAutomaton, newTransitionsXML);
-  // const newTransitionsXML = [...transitions, ...newTransitions].map(
-  //   (transition) => {
-  //     const newFormat = {
-  //       $: {
-  //         from: transition.from,
-  //         to: transition.to,
-  //         symbol: transition.symbol,
-  //       },
-  //     };
-
-  //     if (transition.params && transition.params.length) {
-  //       newFormat["$"].params = transition.params;
-  //     }
-
-  //     if (transition.guard) {
-  //       newFormat.guard = [transition.guard + "\n      "];
-  //     }
-
-  //     if (transition.assignments.length) {
-  //       newFormat.assignments = [
-  //         {
-  //           assign: transition.assignments.map((ass) => ({
-  //             _: ass.reg,
-  //             $: {
-  //               to: ass.to,
-  //             },
-  //           })),
-  //         },
-  //       ];
-  //     }
-
-  //     return newFormat;
-  //   }
-  // );
-
-  // json["register-automaton"].transitions[0].transition = [...newTransitionsXML];
 
   return registerAutomaton;
 }
