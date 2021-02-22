@@ -21,22 +21,11 @@ function addAlternatingIO(registerAutomaton) {
   let newStateCounter = 0;
 
   for (const location of locations) {
-    // has an outgoing input transition
-    const isInputState = transitions.find(
-      (transition) => transition.from === location.name
-    );
-
-    // if not an input state, then we can ignore
-    // not sure if this case would ever come up though
-    if (!isInputState) {
-      continue;
-    }
-
     const outGoingTransitions = transitions.filter(
       (transition) => transition.from === location.name
     );
 
-    // { "q2": [ outGoingTransition, outGoingTransition ] }
+    // format: { "q2": [ outGoingTransition, outGoingTransition ] }
     const outGoingLocationNames = {};
 
     for (const outGoingTransition of outGoingTransitions) {
@@ -49,13 +38,33 @@ function addAlternatingIO(registerAutomaton) {
       }
     }
 
+    console.log(outGoingLocationNames);
+
     for (const outGoingLocationName of Object.keys(outGoingLocationNames)) {
       // don't add OOK transitions + states inbetween final states
       const isFinalState = finalStates.find(
         (loc) => loc.name === outGoingLocationName
       );
+
       if (isFinalState) {
         continue;
+      }
+
+      // if the next state, has outgoing output transitions, then don't add OOK
+      // due to `.find` it only checks one of them, maybe we need to individually
+      // check every next state idk
+      const nextStateHasOutputs = outGoingLocationNames[
+        outGoingLocationName
+      ].some((transition) => {
+        const hasOutputs = transitions
+          .find((t) => t.from === transition.to)
+          .symbol.startsWith("O");
+        return hasOutputs || transition.symbol.startsWith("O");
+      });
+
+      if (nextStateHasOutputs) {
+        console.log("BREAKING");
+        break;
       }
 
       const newLocation = {
