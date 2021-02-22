@@ -5,6 +5,7 @@ Convert an XML register automata (RA) into an [input enabled](https://en.wikiped
 ### Notes about input model
 
 - initial state must have `initial="true"`
+- states with no outgoing transitions will be considered final
 - relies on input transitions starting with I, output with O (as does Tomte)
 
 ### Notes about output model
