@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC "-//Uppaal Team//DTD Flat System 1.1//EN" "lib/flat-1_1.dtd">
+<nta>
+  <declaration>
+int r1 = 1;
+int r2 = 2;
+void IPush(int p0) {
+}
+void IPop(int p0) {
+}
+void IDummy() {
+}
+void OOK() {
+}
+void OFinal() {
+}
+void OOK() {
+}
+void OFinal() {
+}
+</declaration>
+    <template>
+    <name x="5" y="5">Template</name>
+    
+    <declaration></declaration>
+    
+    <location id="q0" x="0" y="0">
+      <name >q0</name>
+      
+      
+    </location>
+
+    <location id="q1" x="0" y="0">
+      <name >q1</name>
+      
+      
+    </location>
+
+    <location id="vk_0" x="0" y="0">
+      <name >vk_0</name>
+      
+      
+    </location>
+
+    <location id="vk_1" x="0" y="0">
+      <name >vk_1</name>
+      
+      
+    </location>
+
+    <location id="vk_2" x="0" y="0">
+      <name >vk_2</name>
+      
+      
+    </location>
+    
+    <init ref="q0" />
+    
+    <transition>
+      <source ref="q0" />
+      <target ref="vk_0" />
+      
+      
+      <label kind="synchronisation">IPush(p)</label>
+      <label kind="assignment">r2=p;</label>
+      
+    </transition>
+
+    <transition>
+      <source ref="q1" />
+      <target ref="vk_1" />
+      
+      
+      <label kind="synchronisation">IPop(p0)</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="vk_0" />
+      <target ref="q1" />
+      
+      
+      <label kind="synchronisation">OOK()</label>
+      
+      
+    </transition>
+
+    <transition>
+      <source ref="vk_1" />
+      <target ref="q0" />
+      
+      
+      <label kind="synchronisation">OOK()</label>
+      
+      
+    </transition>
+  </template>
+
+  <system>Process = Template();system Process;</system>
+</nta>
