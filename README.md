@@ -1,18 +1,17 @@
 # eye-oh
 
-Convert a register automata (RA) into an [input enabled](https://en.wikipedia.org/wiki/Input/output_automaton) RA
+Convert an XML register automata (RA) into an [input enabled](https://en.wikipedia.org/wiki/Input/output_automaton) RA comptatible with Tomte.
 
 ### Notes about input model
 
 - initial state must have `initial="true"`
-- final state must have `final="true"`
 - relies on input transitions starting with I, output with O (as does Tomte)
-- relies on the final state having a single incoming OFINAL transition (which will be moved to point to the sink state)
 
 ### Notes about output model
 
-- the transition `ODummy` will be created
-- the final state will be removed, replaced with sink states
+- the output symbols `ODummy`, `OOK`, and `OFinal` will be created
+- two `sink` states will be added, which will consume the added input enabling transitions
+- to make alternating input/output transitions, the model will add `OOK` transitions inbetween
 
 ### usage
 
