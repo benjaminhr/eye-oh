@@ -1,9 +1,9 @@
 const fs = require("fs");
 const path = require("path");
-const utils = require("./utils");
+const utils = require("./src/utils");
 
-const inputEnable = require("./inputEnable");
-const addAlternatingIO = require("./addAlternatingIO");
+const inputEnable = require("./src/inputEnable");
+const addAlternatingIO = require("./src/addAlternatingIO");
 
 const inputModelName = process.argv[2];
 const outputModelName = process.argv[3];
@@ -21,10 +21,16 @@ if (!fs.existsSync(inputModelPath)) {
   console.log(`Error: Cannot find input model "${inputModelPath}"`);
 }
 
-utils
-  .getRegisterXML(inputModelPath)
-  .then((JSONModel) => addAlternatingIO(JSONModel))
-  .then((alternatingIOModel) => inputEnable(alternatingIOModel))
-  .then((finalModel) => utils.writeModel(outputModelPath, finalModel))
-  .then(() => console.log("Wrote new model: " + outputModelName))
-  .catch(console.log);
+// entrypoint
+(async () => {
+  try {
+    const JSONModel = await utils.getRegisterXML(inputModelPath);
+    const alternatingIOModel = addAlternatingIO(JSONModel);
+    const finalModel = inputEnable(alternatingIOModel);
+
+    utils.writeModel(outputModelPath, finalModel);
+    console.log("Wrote new model: " + outputModelName);
+  } catch (error) {
+    console.log(error);
+  }
+})();
