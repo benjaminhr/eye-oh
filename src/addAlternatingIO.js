@@ -38,8 +38,6 @@ function addAlternatingIO(registerAutomaton) {
       }
     }
 
-    console.log(outGoingLocationNames);
-
     for (const outGoingLocationName of Object.keys(outGoingLocationNames)) {
       // don't add OOK transitions + states inbetween final states
       const isFinalState = finalStates.find(
@@ -96,6 +94,13 @@ function addAlternatingIO(registerAutomaton) {
     final: "true",
   };
   newLocations.push(newFinalState);
+
+  if (finalStates.length === 0) {
+    console.log(
+      "Error: Could not determine final state(s) i.e. a state with no outgoing transitions"
+    );
+    process.exit(1);
+  }
 
   for (const finalState of finalStates) {
     // for each final state, add OFinal transition to new final state
