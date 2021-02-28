@@ -1,5 +1,5 @@
-const path = require("path");
 const fs = require("fs");
+const path = require("path");
 const xml2js = require("xml2js");
 const builder = new xml2js.Builder();
 
@@ -44,6 +44,10 @@ async function getRegisterXML(path) {
   }
 }
 
+function isPath(string) {
+  return string === path.basename(string);
+}
+
 function writeModel(path, JSONModel) {
   const xml = builder.buildObject(JSONModel);
   const fileContents = fs.writeFileSync(path, xml, "utf-8");
@@ -52,5 +56,6 @@ function writeModel(path, JSONModel) {
 module.exports = {
   getRegisterXML,
   parseString,
+  isPath,
   writeModel,
 };

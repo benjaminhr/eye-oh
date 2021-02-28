@@ -61,7 +61,6 @@ function addAlternatingIO(registerAutomaton) {
       });
 
       if (nextStateHasOutputs) {
-        console.log("BREAKING");
         break;
       }
 
