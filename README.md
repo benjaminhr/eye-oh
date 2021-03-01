@@ -1,5 +1,6 @@
 # eye-oh
 
+(Update readme, now each component can be run individually or a pi-calc process can be passed and everything is done for you)
 Convert an XML register automata (RA) into an [input enabled](https://en.wikipedia.org/wiki/Input/output_automaton) RA comptatible with Tomte.
 
 ### Notes about input model

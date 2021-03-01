@@ -8,8 +8,8 @@ const addAlternatingIO = require("./src/addAlternatingIO");
 const FRAtoRA = require("./src/FRAtoRA");
 
 program
-  .option("-i, --input <path>", "path to input model")
-  .option("-o, --output <path>", "path to write output model")
+  .requiredOption("-i, --input <path>", "path to input model")
+  .requiredOption("-o, --output <path>", "path to write output model")
   .option("-a, --alternating-only", "only run alternating i/o component")
   .option("-e, --input-enabling-only", "only run input enabling component")
   .option("--pifra", "");
