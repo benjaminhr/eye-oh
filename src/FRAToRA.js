@@ -3,14 +3,9 @@ const child_process = require("child_process");
 const exec = util.promisify(child_process.exec);
 const utils = require("./utils.js");
 
-/*
-
-  should we have IFreshSend (check against all registers vs the one)
-
-*/
-
-// const registerCount = getRegisterCount(LTSLines[0]);
-// const registerCount = Math.max(...LTSLines.map(getRegisterCount));
+// get the number of initially known names
+// which then will be used in the ISet transition
+// to set all initial register values
 function getNumberOfInitialNames(configurationLine) {
   const initialConfiguration = configurationLine.split(" = ")[1] || "";
   const registerRegex = /{(.*)}/g;
@@ -65,9 +60,10 @@ function containsLocation(locations, locationName) {
   return locations.find((l) => l.name === locationName);
 }
 
+// converts a pifra generated FRA of a pi-calculus process
+// into a JSON formatted RA
 function parseLTS(LTS) {
   const LTSLines = LTS.split("\n");
-  const numberOfInitialNames = getNumberOfInitialNames(LTSLines[0]);
   const registerCount = getRegisterCount(LTSLines);
 
   const locations = [];
@@ -156,7 +152,32 @@ function parseLTS(LTS) {
     transitions.push(newTransition);
   }
 
+  const numberOfInitialNames = getNumberOfInitialNames(LTSLines[0]);
+  const ISetParamsArray = Array(numberOfInitialNames).fill(null);
+  const ISetParams = ISetParamsArray.map((_, i) => `x${i + 1}`);
+
+  const initRegTransition = {
+    from: "k0",
+    to: "s0",
+    symbol: "ISet",
+    assignments: ISetParamsArray.map((_, i) => ({
+      reg: `r${i + 1}`,
+      to: `x${i + 1}`,
+    })),
+    params: ISetParams.join(","),
+    guard: "",
+  };
+
+  transitions.unshift(initRegTransition);
+  locations.unshift({ name: "k0" });
+
   const RA = {
+    inputs: [
+      { name: "ISet", params: ISetParams.map((p) => p.replaceAll("x", "p")) },
+      { name: "ITau", params: [] },
+      { name: "ISend", params: ["x1", "x2"] },
+      { name: "IReceive", params: ["x1", "x2"] },
+    ],
     locations,
     transitions,
     registerCount,
@@ -167,7 +188,7 @@ function parseLTS(LTS) {
   return RA;
 }
 
-async function FRAToRA(piCalcPath) {
+async function FRAtoRA(piCalcPath) {
   // check if pifra exists, propagates error if it doesn't exist in PATH
   await exec("which pifra");
 
@@ -177,7 +198,8 @@ async function FRAToRA(piCalcPath) {
   );
 
   // parse the pifra LTS
-  const FRA = parseLTS(pifraOutput);
+  const RA = parseLTS(pifraOutput);
+  return RA;
 }
 
-module.exports = FRAToRA;
+module.exports = FRAtoRA;

@@ -1,0 +1,132 @@
+{
+  "inputs": [
+    {
+      "name": "ISet",
+      "params": [
+        "x1"
+      ]
+    },
+    {
+      "name": "ITau",
+      "params": []
+    },
+    {
+      "name": "ISend",
+      "params": [
+        "x1",
+        "x2"
+      ]
+    },
+    {
+      "name": "IReceive",
+      "params": [
+        "x1",
+        "x2"
+      ]
+    }
+  ],
+  "locations": [
+    {
+      "name": "k0"
+    },
+    {
+      "name": "s0"
+    },
+    {
+      "name": "s1"
+    },
+    {
+      "name": "s2"
+    },
+    {
+      "name": "s3"
+    }
+  ],
+  "transitions": [
+    {
+      "from": "k0",
+      "to": "s0",
+      "symbol": "ISet",
+      "assignments": [
+        {
+          "reg": "r1",
+          "to": "x1"
+        }
+      ],
+      "params": "x1",
+      "guard": ""
+    },
+    {
+      "from": "s0",
+      "to": "s1",
+      "symbol": "IReceive",
+      "assignments": [],
+      "params": "x1,x2",
+      "guard": "r1==x1"
+    },
+    {
+      "from": "s0",
+      "to": "s1",
+      "symbol": "IReceive",
+      "assignments": [
+        {
+          "reg": "r2",
+          "to": "x2"
+        }
+      ],
+      "params": "x1,x2",
+      "guard": "r1==x1"
+    },
+    {
+      "from": "s0",
+      "to": "s2",
+      "symbol": "ISend",
+      "assignments": [
+        {
+          "reg": "r2",
+          "to": "x2"
+        }
+      ],
+      "params": "x1,x2",
+      "guard": "r1==x1 && r2==x2"
+    },
+    {
+      "from": "s0",
+      "to": "s3",
+      "symbol": "ITau",
+      "assignments": [],
+      "params": "",
+      "guard": ""
+    },
+    {
+      "from": "s1",
+      "to": "s3",
+      "symbol": "ISend",
+      "assignments": [
+        {
+          "reg": "r1",
+          "to": "x2"
+        }
+      ],
+      "params": "x1,x2",
+      "guard": "r1==x1 && r1==x2"
+    },
+    {
+      "from": "s2",
+      "to": "s3",
+      "symbol": "IReceive",
+      "assignments": [],
+      "params": "x1,x2",
+      "guard": "r1==x1"
+    },
+    {
+      "from": "s2",
+      "to": "s3",
+      "symbol": "IReceive",
+      "assignments": [],
+      "params": "x1,x2",
+      "guard": "r1==x1"
+    }
+  ],
+  "registerCount": 2
+}

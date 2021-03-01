@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const xml2js = require("xml2js");
 const builder = new xml2js.Builder();
+const XMLHelpers = require("./XMLHelpers");
 
 // POLYFILL: `pkg` doesn't support node@15 yet, polyfill .flatMap and .replaceAll
 String.prototype.replaceAll = function (a, b) {
@@ -48,14 +49,19 @@ function isPath(string) {
   return string === path.basename(string);
 }
 
-function writeModel(path, JSONModel) {
+function writeXMLModel(path, JSONModel) {
   const xml = builder.buildObject(JSONModel);
-  const fileContents = fs.writeFileSync(path, xml, "utf-8");
+  fs.writeFileSync(path, xml, "utf-8");
+}
+
+function writeRAjson(path, RA) {
+  fs.writeFileSync(path, JSON.stringify(RA, null, 2), "utf-8");
 }
 
 module.exports = {
   getRegisterXML,
   parseString,
   isPath,
-  writeModel,
+  writeXMLModel,
+  writeRAjson,
 };

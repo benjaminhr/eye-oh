@@ -5,11 +5,11 @@ const { program } = require("commander");
 const utils = require("./src/utils");
 const inputEnable = require("./src/inputEnable");
 const addAlternatingIO = require("./src/addAlternatingIO");
-const FRAToRA = require("./src/FRAToRA");
+const FRAtoRA = require("./src/FRAtoRA");
 
 program
-  .requiredOption("-i, --input <path>", "path to input model")
-  .requiredOption("-o, --output <path>", "path to write output model")
+  .option("-i, --input <path>", "path to input model")
+  .option("-o, --output <path>", "path to write output model")
   .option("-a, --alternating-only", "only run alternating i/o component")
   .option("-e, --input-enabling-only", "only run input enabling component")
   .option("--pifra", "");
@@ -18,57 +18,45 @@ program.parse(process.argv);
 
 const options = program.opts();
 
-/*
-  Remove this later
-*/
+const inputModelName = options.input;
+const inputModelPath = path.resolve(process.cwd(), inputModelName);
+
+const outputModelName = options.output;
+const outputModelPath = path.resolve(process.cwd(), outputModelName);
+
+if (!fs.existsSync(inputModelPath)) {
+  console.log(`Error: Cannot find input model "${inputModelPath}"`);
+}
+
+// entrypoint
 (async () => {
   try {
+    let finalModel;
+
     if (options.pifra) {
-      const piCalcFileName = options.input;
-      const piCalcPath = path.resolve(process.cwd(), piCalcFileName);
+      console.log("ONLY RUNNING PIFRA FRA TO RA CONVERSION");
+      const RA = await FRAtoRA(inputModelPath);
+      utils.writeRAjson(outputModelPath, RA);
+    } else if (options.alternatingOnly) {
+      console.log("ONLY RUNNING ALTERNATING I/O COMPONENT");
+      const JSONModel = await utils.getRegisterXML(inputModelPath);
+      finalModel = addAlternatingIO(JSONModel);
+    } else if (options.inputEnablingOnly) {
+      console.log("ONLY RUNNING INPUT ENABLING COMPONENT");
+      const JSONModel = await utils.getRegisterXML(inputModelPath);
+      finalModel = inputEnable(JSONModel);
+    } else {
+      // full complete run with all components
+      const RA = await FRAtoRA(piCalcPath);
+      const alternatingIOModel = addAlternatingIO(JSONModel, false);
+      finalModel = inputEnable(alternatingIOModel, false);
+    }
 
-      if (!fs.existsSync(piCalcPath)) {
-        console.log(`Error: Cannot find pi-calculus file "${piCalcPath}"`);
-      }
-
-      await FRAToRA(piCalcPath);
-      process.exit(0);
+    if (finalModel) {
+      utils.writeXMLModel(outputModelPath, finalModel);
+      console.log("Wrote new model: " + outputModelName);
     }
   } catch (error) {
     console.log(error);
   }
 })();
-
-// const inputModelName = options.input;
-// const inputModelPath = path.resolve(process.cwd(), inputModelName);
-
-// const outputModelName = options.output;
-// const outputModelPath = path.resolve(process.cwd(), outputModelName);
-
-// if (!fs.existsSync(inputModelPath)) {
-//   console.log(`Error: Cannot find input model "${inputModelPath}"`);
-// }
-
-// // entrypoint
-// (async () => {
-//   try {
-//     const JSONModel = await utils.getRegisterXML(inputModelPath);
-
-//     let finalModel;
-//     if (options.alternatingOnly) {
-//       console.log("ONLY RUNNING ALTERNATING I/O COMPONENT");
-//       finalModel = addAlternatingIO(JSONModel);
-//     } else if (options.inputEnablingOnly) {
-//       console.log("ONLY RUNNING INPUT ENABLING COMPONENT");
-//       finalModel = inputEnable(JSONModel);
-//     } else {
-//       const alternatingIOModel = addAlternatingIO(JSONModel);
-//       finalModel = inputEnable(alternatingIOModel);
-//     }
-
-//     utils.writeModel(outputModelPath, finalModel);
-//     console.log("Wrote new model: " + outputModelName);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// })();
