@@ -104,13 +104,13 @@ function parseLTS(LTS) {
     // determine transition symbol
     if (FRATransition.includes("'")) {
       let [channel, value] = FRATransition.split("'");
-      value = value.replace("*", "").replace("^", "");
 
       newTransition.symbol = "ISend";
       newTransition.params = "x1,x2";
       newTransition.guard = `r${channel}==x1`;
 
       if (value.includes("*") || value.includes("^")) {
+        value = value.replace("*", "").replace("^", "");
         newTransition.guard += " && (";
 
         for (let i = 1; i <= registerCount; i++) {
@@ -134,13 +134,13 @@ function parseLTS(LTS) {
       newTransition.symbol = "ITau";
     } else {
       let [channel, value] = FRATransition.split(" ");
-      value = value.replace("*", "").replace("^", "");
 
       newTransition.symbol = "IReceive";
       newTransition.params = "x1,x2";
       newTransition.guard = `r${channel}==x1`;
 
       // ?????
+      // value = value.replace("*", "").replace("^", "");
       if (channel !== value) {
         newTransition.assignments.push({
           reg: `r${value}`,
