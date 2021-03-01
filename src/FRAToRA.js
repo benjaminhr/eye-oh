@@ -140,7 +140,7 @@ function parseLTS(LTS) {
       newTransition.guard = `r${channel}==x1`;
 
       // ?????
-      // value = value.replace("*", "").replace("^", "");
+      value = value.replace("*", "").replace("^", "");
       if (channel !== value) {
         newTransition.assignments.push({
           reg: `r${value}`,

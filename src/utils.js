@@ -4,6 +4,8 @@ const xml2js = require("xml2js");
 const builder = new xml2js.Builder();
 const XMLHelpers = require("./XMLHelpers");
 
+const beautifyXML = require("xml-beautifier");
+
 // POLYFILL: `pkg` doesn't support node@15 yet, polyfill .flatMap and .replaceAll
 String.prototype.replaceAll = function (a, b) {
   return this.split(a).join(b);
@@ -126,7 +128,7 @@ function writePiCalcRA(path, RA, json = false) {
   </register-automaton>
   `;
 
-  fs.writeFileSync(path, xml, "utf-8");
+  fs.writeFileSync(path, beautifyXML(xml), "utf-8");
 }
 
 module.exports = {

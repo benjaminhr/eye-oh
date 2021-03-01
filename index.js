@@ -12,7 +12,8 @@ program
   .requiredOption("-o, --output <path>", "path to write output model")
   .option("-a, --alternating-only", "only run alternating i/o component")
   .option("-e, --input-enabling-only", "only run input enabling component")
-  .option("--pifra", "");
+  .option("-p, --pifra-only", "only run pifra LTS conversion component")
+  .option("--json", "only usable with --pifra-only to get JSON output");
 
 program.parse(process.argv);
 
@@ -33,10 +34,10 @@ if (!fs.existsSync(inputModelPath)) {
   try {
     let finalModel;
 
-    if (options.pifra) {
+    if (options.pifraOnly) {
       console.log("ONLY RUNNING PIFRA FRA TO RA CONVERSION");
       const RA = await FRAtoRA(inputModelPath);
-      utils.writePiCalcRA(outputModelPath, RA, true);
+      utils.writePiCalcRA(outputModelPath, RA, options.json);
     } else if (options.alternatingOnly) {
       console.log("ONLY RUNNING ALTERNATING I/O COMPONENT");
       const JSONModel = await utils.getRegisterXML(inputModelPath);
