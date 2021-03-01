@@ -36,7 +36,7 @@ if (!fs.existsSync(inputModelPath)) {
     if (options.pifra) {
       console.log("ONLY RUNNING PIFRA FRA TO RA CONVERSION");
       const RA = await FRAtoRA(inputModelPath);
-      utils.writeRAjson(outputModelPath, RA);
+      utils.writePiCalcRA(outputModelPath, RA, true);
     } else if (options.alternatingOnly) {
       console.log("ONLY RUNNING ALTERNATING I/O COMPONENT");
       const JSONModel = await utils.getRegisterXML(inputModelPath);
@@ -47,7 +47,10 @@ if (!fs.existsSync(inputModelPath)) {
       finalModel = inputEnable(JSONModel);
     } else {
       // full complete run with all components
-      const RA = await FRAtoRA(piCalcPath);
+      const RA = await FRAtoRA(inputModelPath);
+      utils.writePiCalcRA(outputModelPath, RA);
+
+      const JSONModel = await utils.getRegisterXML(outputModelPath);
       const alternatingIOModel = addAlternatingIO(JSONModel, false);
       finalModel = inputEnable(alternatingIOModel, false);
     }

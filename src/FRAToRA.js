@@ -169,7 +169,7 @@ function parseLTS(LTS) {
   };
 
   transitions.unshift(initRegTransition);
-  locations.unshift({ name: "k0" });
+  locations.unshift({ name: "k0", initial: true });
 
   const RA = {
     inputs: [
