@@ -79,11 +79,12 @@ function inputEnable(registerAutomaton) {
     process.exit(1);
   }
 
-  const oFinalTransitionIndex = transitions.findIndex(
-    (tran) => tran.to === finalState
-  );
-  // point second last state to sink_two with OFinal transition
-  transitions[oFinalTransitionIndex].to = "sink_two";
+  // point all OFinal transitions to sink state
+  transitions.forEach((transition) => {
+    if (transition.to === finalState) {
+      transition.to = "sink_two";
+    }
+  });
 
   // remove old final state
   locations = locations.filter((loc) => loc.name != finalState);

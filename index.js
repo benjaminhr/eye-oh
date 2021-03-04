@@ -27,6 +27,7 @@ const outputModelPath = path.resolve(process.cwd(), outputModelName);
 
 if (!fs.existsSync(inputModelPath)) {
   console.log(`Error: Cannot find input model "${inputModelPath}"`);
+  process.exit(1);
 }
 
 // entrypoint
