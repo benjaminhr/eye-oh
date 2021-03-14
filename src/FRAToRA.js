@@ -109,6 +109,7 @@ function parseLTS(LTS) {
       newTransition.params = "x1,x2";
       newTransition.guard = `r${channel}==x1`;
 
+      // globally or locally fresh
       if (value.includes("*") || value.includes("^")) {
         value = value.replace("*", "").replace("^", "");
         newTransition.guard += " && (";
@@ -123,6 +124,7 @@ function parseLTS(LTS) {
 
         newTransition.guard += ")";
       } else {
+        // known
         newTransition.guard += ` && r${value}==x2`;
       }
 
@@ -139,32 +141,47 @@ function parseLTS(LTS) {
       newTransition.params = "x1,x2";
       newTransition.guard = `r${channel}==x1`;
 
-      // ?????
-      value = value.replace("*", "").replace("^", "");
-      if (channel !== value) {
+      // globally or locally fresh
+      if (value.includes("*") || value.includes("^")) {
+        value = value.replace("*", "").replace("^", "");
+        newTransition.guard += " && (";
+
+        for (let i = 1; i <= registerCount; i++) {
+          newTransition.guard += `r${i}!=x2`;
+
+          if (i < registerCount) {
+            newTransition.guard += " && ";
+          }
+        }
+
+        newTransition.guard += ")";
+
         newTransition.assignments.push({
           reg: `r${value}`,
           to: "x2",
         });
+      } else {
+        // known
+        newTransition.guard += ` && r${value}==x2`;
       }
     }
 
     transitions.push(newTransition);
   }
 
-  const numberOfInitialNames = getNumberOfInitialNames(LTSLines[0]);
-  const ISetParamsArray = Array(numberOfInitialNames).fill(null);
-  const ISetParams = ISetParamsArray.map((_, i) => `x${i + 1}`);
+  // const numberOfInitialNames = getNumberOfInitialNames(LTSLines[0]);
+  const ISetAssignmentArray = Array(registerCount).fill(null);
+  // const ISetParams = ISetParamsArray.map((_, i) => `x${i + 1}`);
 
   const initRegTransition = {
     from: "k0",
     to: "s0",
     symbol: "ISet",
-    assignments: ISetParamsArray.map((_, i) => ({
+    assignments: ISetAssignmentArray.map((_, i) => ({
       reg: `r${i + 1}`,
-      to: `x${i + 1}`,
+      to: `x1`,
     })),
-    params: ISetParams.join(","),
+    params: "x1",
     guard: "",
   };
 
@@ -173,7 +190,7 @@ function parseLTS(LTS) {
 
   const RA = {
     inputs: [
-      { name: "ISet", params: ISetParams.map((p) => p.replaceAll("x", "p")) },
+      { name: "ISet", params: ["x1"] },
       { name: "ITau", params: [] },
       { name: "ISend", params: ["x1", "x2"] },
       { name: "IReceive", params: ["x1", "x2"] },
@@ -194,7 +211,7 @@ async function FRAtoRA(piCalcPath) {
 
   // call pifra with process file and get stdout
   const { stdout: pifraOutput } = await exec(
-    `pifra --output-pretty ${piCalcPath}`
+    `pifra --output-pretty --disable-gc ${piCalcPath}`
   );
 
   // parse the pifra LTS

@@ -10,9 +10,9 @@ const FRAtoRA = require("./src/FRAtoRA");
 program
   .requiredOption("-i, --input <path>", "path to input model")
   .requiredOption("-o, --output <path>", "path to write output model")
+  .option("-c, --conversion-only", "only run pifra LTS conversion component")
   .option("-a, --alternating-only", "only run alternating i/o component")
   .option("-e, --input-enabling-only", "only run input enabling component")
-  .option("-p, --pifra-only", "only run pifra LTS conversion component")
   .option("--json", "only usable with --pifra-only to get JSON output");
 
 program.parse(process.argv);
@@ -35,7 +35,7 @@ if (!fs.existsSync(inputModelPath)) {
   try {
     let finalModel;
 
-    if (options.pifraOnly) {
+    if (options.conversionOnly) {
       console.log("ONLY RUNNING PIFRA FRA TO RA CONVERSION");
       const RA = await FRAtoRA(inputModelPath);
       utils.writePiCalcRA(outputModelPath, RA, options.json);

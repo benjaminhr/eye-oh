@@ -38,6 +38,12 @@ async function getRegisterXML(path) {
   try {
     const fileContents = fs.readFileSync(path, "utf-8");
     const json = await parseString(fileContents);
+
+    if (!json.hasOwnProperty("register-automaton")) {
+      console.log("XML model is not the correct register-automaton format");
+      process.exit(1);
+    }
+
     return json;
   } catch (error) {
     console.log("Error: ", error);
