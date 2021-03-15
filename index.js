@@ -6,6 +6,7 @@ const utils = require("./src/utils");
 const inputEnable = require("./src/inputEnable");
 const addAlternatingIO = require("./src/addAlternatingIO");
 const FRAtoRA = require("./src/FRAtoRA");
+const prune = require("./src/prune");
 
 program
   .requiredOption("-i, --input <path>", "path to input model")
@@ -13,7 +14,8 @@ program
   .option("-c, --conversion-only", "only run pifra LTS conversion component")
   .option("-a, --alternating-only", "only run alternating i/o component")
   .option("-e, --input-enabling-only", "only run input enabling component")
-  .option("--json", "only usable with --pifra-only to get JSON output");
+  .option("-j, --json", "only usable with --pifra-only to get JSON output")
+  .option("-p, --prune", "remove all states/transitions added in eye-oh");
 
 program.parse(process.argv);
 
@@ -47,6 +49,10 @@ if (!fs.existsSync(inputModelPath)) {
       console.log("ONLY RUNNING INPUT ENABLING COMPONENT");
       const JSONModel = await utils.getRegisterXML(inputModelPath);
       finalModel = inputEnable(JSONModel);
+    } else if (options.prune) {
+      console.log("ONLY RUNNING PRUNING COMPONENT");
+      const JSONModel = await utils.getRegisterXML(inputModelPath);
+      finalModel = prune(JSONModel);
     } else {
       // full complete run with all components
       const RA = await FRAtoRA(inputModelPath);

@@ -3,32 +3,6 @@ const child_process = require("child_process");
 const exec = util.promisify(child_process.exec);
 const utils = require("./utils.js");
 
-// get the number of initially known names
-// which then will be used in the ISet transition
-// to set all initial register values
-function getNumberOfInitialNames(configurationLine) {
-  const initialConfiguration = configurationLine.split(" = ")[1] || "";
-  const registerRegex = /{(.*)}/g;
-  const registerRegexMatches = initialConfiguration.match(registerRegex);
-
-  if (!registerRegexMatches.length) {
-    console.log(
-      "Unable to read initial configuration from pifra LTS",
-      configurationLine
-    );
-    process.exit(1);
-  }
-
-  // e.g. [ '(1,_BAD)', '(2,#1)', '(3,#2)' ]
-  const registers = registerRegexMatches[0]
-    .replace("{", "")
-    .replace("}", "")
-    .replaceAll("),", "),X__X__X")
-    .split(",X__X__X");
-
-  return registers.length;
-}
-
 // go through all LTS lines, and find highest transition register number
 // e.g. 3'4^ would have 4
 function getRegisterCount(lines) {
@@ -169,12 +143,9 @@ function parseLTS(LTS) {
     transitions.push(newTransition);
   }
 
-  // const numberOfInitialNames = getNumberOfInitialNames(LTSLines[0]);
   const ISetAssignmentArray = Array(registerCount).fill(null);
-  // const ISetParams = ISetParamsArray.map((_, i) => `x${i + 1}`);
-
   const initRegTransition = {
-    from: "k0",
+    from: "kk_0",
     to: "s0",
     symbol: "ISet",
     assignments: ISetAssignmentArray.map((_, i) => ({
@@ -186,7 +157,7 @@ function parseLTS(LTS) {
   };
 
   transitions.unshift(initRegTransition);
-  locations.unshift({ name: "k0", initial: true });
+  locations.unshift({ name: "kk_0", initial: true });
 
   const RA = {
     inputs: [
@@ -199,8 +170,6 @@ function parseLTS(LTS) {
     transitions,
     registerCount,
   };
-
-  // console.log(JSON.stringify(RA, null, 2));
 
   return RA;
 }

@@ -8,7 +8,7 @@ Convert an XML register automata (RA) into an [input enabled](https://en.wikiped
 - initial state must have `initial="true"`
 - states with no outgoing transitions will be considered final
 - relies on input transitions starting with I, output with O (as does Tomte)
-- new states will be prefixed `vk_N`, make sure not to have these in your input model already
+- make sure not to have states prefixed `vk_N` and `kk_` or named `sink` and `sink_two` in your input model already
 
 ### Notes about output model
 
@@ -20,3 +20,4 @@ Convert an XML register automata (RA) into an [input enabled](https://en.wikiped
 
 - take one of the relevant binaries from the `dist` folder and place it in path or `/usr/local/bin`
 - `eye-oh <input_model_name> <output_model_name>`
+- `eye-oh --help` to list all available commands
