@@ -1,6 +1,11 @@
 # eye-oh
 
 (Update readme, now each component can be run individually or a pi-calc process can be passed and everything is done for you)
+
+(Update readme, mention all binaries needed in path sut_uppaal2register (and other sut binaries), tomte_learn, sut_run, pifra, deq)
+
+(Update readme, with good lines for visualising input model and output models)
+
 Convert an XML register automata (RA) into an [input enabled](https://en.wikipedia.org/wiki/Input/output_automaton) RA comptatible with Tomte.
 
 ### Notes about input model

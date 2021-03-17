@@ -64,6 +64,34 @@ module.exports = {
         json["register-automaton"].alphabet[0].outputs = [{ symbol: [] }];
       }
 
+      // yeah this should be fixed, if writing inputs then rewrite the whole
+      // list of input symbols, unlike outputs which are just appended
+      if (type == "inputs") {
+        json["register-automaton"].alphabet[0][type][0].symbol = newSymbols.map(
+          (symbol) => {
+            if (symbol.param.length) {
+              return {
+                $: {
+                  name: symbol.name,
+                },
+                param: symbol.param.map((param) => ({
+                  $: {
+                    name: param.name,
+                    type: param.type,
+                  },
+                })),
+              };
+            }
+
+            return {
+              $: {
+                name: symbol.name,
+              },
+            };
+          }
+        );
+      }
+
       for (const newSymbol of newSymbols) {
         json["register-automaton"].alphabet[0][type][0].symbol.push({
           $: {

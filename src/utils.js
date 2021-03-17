@@ -51,10 +51,6 @@ async function getRegisterXML(path) {
   }
 }
 
-function isPath(string) {
-  return string === path.basename(string);
-}
-
 function writeXMLModel(path, JSONModel) {
   const xml = builder.buildObject(JSONModel);
   fs.writeFileSync(path, xml, "utf-8");
@@ -120,6 +116,12 @@ function writePiCalcRA(path, RA, json = false) {
     </symbol>`;
   });
 
+  const outputs = RA.outputs.map((i) => {
+    return `            <symbol name="${i.name}">
+    ${i.params.map((p) => `<param name="${p}" type="int" />`).join("\n")}
+    </symbol>`;
+  });
+
   const registers = Array(RA.registerCount)
     .fill(null)
     .map((r, i) => {
@@ -160,25 +162,28 @@ function writePiCalcRA(path, RA, json = false) {
 
   const xml = `
 <?xml version="1.0" encoding="UTF-8" ?>
-  <register-automaton>
-    <alphabet>
-      <inputs>
-        ${inputs.join("\n")}
-      </inputs>
-    </alphabet>
-  
-    <globals>
-      ${registers.join("\n")}
-    </globals>
-  
-    <locations>
-      ${locations.join("\n")}
-    </locations>
-  
-    <transitions>
-        ${transitions.join("\n")}
-    </transitions>
-  </register-automaton>
+<register-automaton>
+  <alphabet>
+    <inputs>
+      ${inputs.join("\n")}
+    </inputs>
+    <outputs>
+      ${outputs.join("\n")}
+    </outputs>
+  </alphabet>
+
+  <globals>
+    ${registers.join("\n")}
+  </globals>
+
+  <locations>
+    ${locations.join("\n")}
+  </locations>
+
+  <transitions>
+      ${transitions.join("\n")}
+  </transitions>
+</register-automaton>
   `;
 
   fs.writeFileSync(path, formatXML(xml), "utf-8");
@@ -187,7 +192,6 @@ function writePiCalcRA(path, RA, json = false) {
 module.exports = {
   getRegisterXML,
   parseString,
-  isPath,
   writeXMLModel,
   writePiCalcRA,
 };

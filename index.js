@@ -52,8 +52,14 @@ if (!fs.existsSync(inputModelPath)) {
     } else if (options.prune) {
       console.log("ONLY RUNNING PRUNING COMPONENT");
       const JSONModel = await utils.getRegisterXML(inputModelPath);
-      finalModel = prune(JSONModel);
+      const RA = prune(JSONModel);
+      utils.writePiCalcRA(outputModelPath, RA);
     } else {
+      if (!inputModelPath.endsWith(".pi")) {
+        console.log(`Error: Input model file does not have extension .pi`);
+        process.exit(1);
+      }
+
       // full complete run with all components
       const RA = await FRAtoRA(inputModelPath);
       utils.writePiCalcRA(outputModelPath, RA);

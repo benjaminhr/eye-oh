@@ -1,43 +1,107 @@
 const XMLHelpers = require("./XMLHelpers");
 
 function prune(registerAutomaton) {
-  let inputs = XMLHelpers.get.symbols(registerAutomaton, "inputs");
-  let outputs = XMLHelpers.get.symbols(registerAutomaton, "output");
-  let locations = XMLHelpers.get.locations(registerAutomaton);
-  let transitions = XMLHelpers.get.transitions(registerAutomaton);
+  const inputs = XMLHelpers.get.symbols(registerAutomaton, "inputs");
+  const outputs = XMLHelpers.get.symbols(registerAutomaton, "output");
+  const locations = XMLHelpers.get.locations(registerAutomaton);
+  const transitions = XMLHelpers.get.transitions(registerAutomaton);
 
-  /*
-    Remove locations
-  */
-  const addedLocationNames = ["kk_", "vk_", "sink", "sink_two"];
-  const newLocationNames = locations.filter((loc) => {
+  // Remove locations
+  const addedLocationNames = ["m"];
+  const newLocations = locations.filter((loc) => {
     const locationName = loc.name;
     return !addedLocationNames.some((name) => locationName.startsWith(name));
   });
-  XMLHelpers.write.locations(registerAutomaton, newLocationNames);
 
-  /*
-    Remove inputs
-  */
-  const newInputs = inputs.filter((input) => input.name !== "ISet");
-  XMLHelpers.write.symbols(registerAutomaton, "inputs", newInputs);
+  // Remove inputs - we don't remove any (e.g. ISet)
+  const newInputs = inputs.map((input) => ({
+    name: input.name,
+    params: input.param.map((p) => p.name),
+  }));
 
-  /*
-    Remove outputs
-  */
-  const newOutputs = outputs.filter(
-    (output) =>
-      output.name != "OOK" || output.name != "OFinal" || output.name != "ODummy"
-  );
-  XMLHelpers.write.symbols(registerAutomaton, "outputs", newOutputs);
+  // Remove outputs
+  const addedOutputNames = ["OOK", "OFinal", "ODummy"];
+  const newOutputs = outputs
+    .filter((output) => !removedOutputNames.includes(output.name))
+    .map((output) => ({
+      name: output.name,
+      params: output.param.map((p) => p.name),
+    }));
 
-  /*
-    Remove transitions
-  */
+  // Remove transitions
+  // {
+  //   "from": "s2",
+  //   "to": "s5",
+  //   "symbol": "ISend",
+  //   "assignments": [
+  //     {
+  //       "reg": "r1",
+  //       "to": "x2"
+  //     }
+  //   ],
+  //   "params": "x1,x2",
+  //   "guard": "r1==x1 && (r1!=x2 && r2!=x2)"
+  // }
+  const newTransitions = [];
+  for (const transition of transitions) {
+    const fromLocation = transition.from;
+    const toLocation = transition.to;
+    const transitionSymbol = transition.symbol;
 
-  // XMLHelpers.write.transitions(registerAutomaton, newTransitions);
+    if (transitionSymbol.startsWith("O")) {
+      continue;
+    }
 
-  return registerAutomaton;
+    if (transitionSymbol != "ITau") {
+      if (transition.guard.length == 0) {
+        continue;
+      }
+    }
+
+    // transitions going out of the next state
+    const toLocationTransitions = transitions.filter(
+      (t) => t.from === toLocation
+    );
+
+    const nextLocationHasAddedOutputs = toLocationTransitions.find((t) =>
+      addedOutputNames.includes(t.symbol)
+    );
+
+    // next state doesn't have transitions "OOK", "OFinal", "ODummy"
+    if (!nextLocationHasAddedOutputs) {
+      continue;
+    }
+
+    transition.to = toLocationTransitions[0].to;
+    newTransitions.push(transition);
+  }
+
+  // "globals": [
+  //   {
+  //     "variable": [
+  //       {
+  //         "_": "-1",
+  //         "$": {
+  //           "type": "int",
+  //           "name": "x0"
+  //         }
+  //       }
+  //     ]
+  //   }
+  // ],
+
+  const registerCount =
+    registerAutomaton["register-automaton"].globals[0].variable.length;
+
+  const RA = {
+    inputs: newInputs,
+    outputs: newOutputs,
+    locations: newLocations,
+    transitions: newTransitions,
+    registerCount,
+  };
+
+  return RA;
 }
 
 module.exports = prune;
