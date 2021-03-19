@@ -71,13 +71,13 @@
       <to>s1</to>
     </transition>
 
-    <transition>
+    <!-- <transition>
       <from>k0</from>
       <input>ISend</input>
       <op>LFresh</op>
       <register>1</register>
       <to>s4</to>
-    </transition>
+    </transition> -->
 
     <!-- <transition>
       <from>s2</from>

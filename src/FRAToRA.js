@@ -79,64 +79,66 @@ function parseLTS(LTS) {
     if (FRATransition.includes("'")) {
       let [channel, value] = FRATransition.split("'");
 
-      newTransition.symbol = "ISend";
-      newTransition.params = "x1";
-      // newTransition.guard = `r${channel}==x1`;
+      newTransition.params = "x1,x2";
+      newTransition.guard = `r${channel}==x1`;
 
       // globally or locally fresh
       if (value.includes("*") || value.includes("^")) {
+        newTransition.symbol = "IFreshSend";
         value = value.replace("*", "").replace("^", "");
-        // newTransition.guard += " && (";
+        newTransition.guard += " && (";
 
         for (let i = 1; i <= registerCount; i++) {
-          newTransition.guard += `r${i}!=x1`;
+          newTransition.guard += `r${i}!=x2`;
 
           if (i < registerCount) {
             newTransition.guard += " && ";
           }
         }
 
-        // newTransition.guard += ")";
+        newTransition.guard += ")";
       } else {
         // known
-        newTransition.guard += `r${value}==x1`;
+        newTransition.symbol = "IKnownSend";
+        newTransition.guard += ` && r${value}==x2`;
       }
 
       newTransition.assignments.push({
         reg: `r${value}`,
-        to: "x1",
+        to: "x2",
       });
     } else if (FRATransition.includes("t")) {
       newTransition.symbol = "ITau";
     } else {
       let [channel, value] = FRATransition.split(" ");
 
-      newTransition.symbol = "IReceive";
-      newTransition.params = "x1";
-      // newTransition.guard = `r${channel}==x1`;
+      newTransition.params = "x1,x2";
+      newTransition.guard = `r${channel}==x1`;
 
       // globally or locally fresh
       if (value.includes("*") || value.includes("^")) {
+        newTransition.symbol = "IFreshReceive";
         value = value.replace("*", "").replace("^", "");
-        // newTransition.guard += " && (";
+        newTransition.guard += " && (";
 
         for (let i = 1; i <= registerCount; i++) {
-          newTransition.guard += `r${i}!=x1`;
+          newTransition.guard += `r${i}!=x2`;
 
           if (i < registerCount) {
             newTransition.guard += " && ";
           }
         }
 
-        // newTransition.guard += ")";
+        newTransition.guard += ")";
 
         newTransition.assignments.push({
           reg: `r${value}`,
-          to: "x1",
+          to: "x2",
         });
       } else {
         // known
-        newTransition.guard += `r${value}==x1`;
+        newTransition.symbol = "IKnownReceive";
+        newTransition.guard += ` && r${value}==x2`;
       }
     }
 
@@ -163,15 +165,15 @@ function parseLTS(LTS) {
     inputs: [
       { name: "ISet", params: ["x1"] },
       { name: "ITau", params: [] },
-      { name: "ISend", params: ["x1"] },
-      { name: "IReceive", params: ["x1"] },
+      { name: "IKnownSend", params: ["x1", "x2"] },
+      { name: "IKnownReceive", params: ["x1", "x2"] },
+      { name: "IFreshSend", params: ["x1", "x2"] },
+      { name: "IFreshReceive", params: ["x1", "x2"] },
     ],
     locations,
     transitions,
     registerCount,
   };
-
-  console.log(JSON.stringify(RA, null, 2));
 
   return RA;
 }

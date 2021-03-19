@@ -92,6 +92,16 @@ module.exports = {
         );
       }
 
+      if (type === "outputs") {
+        if (
+          typeof json["register-automaton"].alphabet[0].outputs[0] === "string"
+        ) {
+          json["register-automaton"].alphabet[0].outputs[0] = {
+            symbol: [],
+          };
+        }
+      }
+
       for (const newSymbol of newSymbols) {
         json["register-automaton"].alphabet[0][type][0].symbol.push({
           $: {

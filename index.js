@@ -65,8 +65,8 @@ if (!fs.existsSync(inputModelPath)) {
       utils.writePiCalcRA(outputModelPath, RA);
 
       const JSONModel = await utils.getRegisterXML(outputModelPath);
-      const alternatingIOModel = addAlternatingIO(JSONModel, false);
-      finalModel = inputEnable(alternatingIOModel, false);
+      finalModel = addAlternatingIO(JSONModel);
+      finalModel = inputEnable(JSONModel);
     }
 
     if (finalModel) {

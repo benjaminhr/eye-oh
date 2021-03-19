@@ -52,43 +52,34 @@ function prune(registerAutomaton) {
       continue;
     }
 
-    if (transitionSymbol != "ITau") {
-      if (transition.guard.length == 0) {
-        continue;
-      }
-    }
-
     // transitions going out of the next state
     const toLocationTransitions = transitions.filter(
       (t) => t.from === toLocation
     );
 
-    const nextLocationHasAddedOutputs = toLocationTransitions.find((t) =>
-      addedOutputNames.includes(t.symbol)
-    );
+    const nextLocationHas = (symbol) => {
+      return toLocationTransitions.find((t) => t.symbol == symbol);
+    };
 
-    // next state doesn't have transitions "OOK", "OFinal", "ODummy"
-    if (!nextLocationHasAddedOutputs) {
-      continue;
+    if (nextLocationHas("ODummy")) {
+      // remove ODummy transition, current transition
+      // console.log(
+      //   "removing: " +
+      //     transition.symbol +
+      //     " from " +
+      //     transition.from +
+      //     " to " +
+      //     transition.to
+      // );
+    } else if (nextLocationHas("OOK")) {
+      transition.to = toLocationTransitions[0].to;
+      newTransitions.push(transition);
+    } else if (nextLocationHas("OFinal")) {
+      // console.log("OFinal " + transition.symbol);
+      transition.to = toLocationTransitions[0].to;
+      newTransitions.push(transition);
     }
-
-    transition.to = toLocationTransitions[0].to;
-    newTransitions.push(transition);
   }
-
-  // "globals": [
-  //   {
-  //     "variable": [
-  //       {
-  //         "_": "-1",
-  //         "$": {
-  //           "type": "int",
-  //           "name": "x0"
-  //         }
-  //       }
-  //     ]
-  //   }
-  // ],
 
   const registerCount =
     registerAutomaton["register-automaton"].globals[0].variable.length;

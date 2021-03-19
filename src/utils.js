@@ -116,11 +116,13 @@ function writePiCalcRA(path, RA, json = false) {
     </symbol>`;
   });
 
-  const outputs = RA.outputs.map((i) => {
-    return `            <symbol name="${i.name}">
+  const outputs = RA.outputs
+    ? RA.outputs.map((i) => {
+        return `            <symbol name="${i.name}">
     ${i.params.map((p) => `<param name="${p}" type="int" />`).join("\n")}
     </symbol>`;
-  });
+      })
+    : [];
 
   const registers = Array(RA.registerCount)
     .fill(null)

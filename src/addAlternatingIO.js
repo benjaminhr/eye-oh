@@ -112,6 +112,7 @@ function addAlternatingIO(registerAutomaton) {
     };
 
     newTransitions.push(OFinalTransition);
+    newLocations.push(newFinalState);
   }
 
   XMLHelpers.write.locations(registerAutomaton, [
