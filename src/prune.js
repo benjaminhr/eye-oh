@@ -29,19 +29,6 @@ function prune(registerAutomaton) {
     }));
 
   // Remove transitions
-  // {
-  //   "from": "s2",
-  //   "to": "s5",
-  //   "symbol": "ISend",
-  //   "assignments": [
-  //     {
-  //       "reg": "r1",
-  //       "to": "x2"
-  //     }
-  //   ],
-  //   "params": "x1,x2",
-  //   "guard": "r1==x1 && (r1!=x2 && r2!=x2)"
-  // }
   const newTransitions = [];
   for (const transition of transitions) {
     const fromLocation = transition.from;
@@ -62,20 +49,11 @@ function prune(registerAutomaton) {
     };
 
     if (nextLocationHas("ODummy")) {
-      // remove ODummy transition, current transition
-      // console.log(
-      //   "removing: " +
-      //     transition.symbol +
-      //     " from " +
-      //     transition.from +
-      //     " to " +
-      //     transition.to
-      // );
+      // do nothing
     } else if (nextLocationHas("OOK")) {
       transition.to = toLocationTransitions[0].to;
       newTransitions.push(transition);
     } else if (nextLocationHas("OFinal")) {
-      // console.log("OFinal " + transition.symbol);
       transition.to = toLocationTransitions[0].to;
       newTransitions.push(transition);
     }

@@ -37,15 +37,15 @@ function inputEnable(registerAutomaton) {
     );
 
     for (let missingTransition of missingTransitions) {
-      // const newTransition = {
-      //   from: location.name,
-      //   to: "sink_1",
-      //   symbol: missingTransition.name,
-      //   assignments: [],
-      //   // params for sink state transitions "x0,...,xN"
-      //   params: missingTransition.param.map((_, i) => `x${i + 1}`).join(","),
-      //   guard: "",
-      // };
+      const newTransition = {
+        from: location.name,
+        to: "sink",
+        symbol: missingTransition.name,
+        assignments: [],
+        // params for sink state transitions "x0,...,xN"
+        params: missingTransition.param.map((_, i) => `x${i + 1}`).join(","),
+        guard: "",
+      };
 
       // is the missing transition, a transition which already exists but has a guard
       // => we need to invert the guard
@@ -64,10 +64,10 @@ function inputEnable(registerAutomaton) {
         guard = guard.replaceAll("!=", "==");
         guard = guard.replaceAll("___1___", "!=");
 
-        // newTransition.guard = guard;
+        newTransition.guard = guard;
       }
 
-      // newTransitions.push(newTransition);
+      newTransitions.push(newTransition);
     }
   }
 

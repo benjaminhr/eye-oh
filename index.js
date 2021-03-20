@@ -1,6 +1,9 @@
 const fs = require("fs");
+const util = require("util");
 const path = require("path");
 const { program } = require("commander");
+const child_process = require("child_process");
+const exec = util.promisify(child_process.exec);
 
 const utils = require("./src/utils");
 const inputEnable = require("./src/inputEnable");
@@ -15,7 +18,8 @@ program
   .option("-a, --alternating-only", "only run alternating i/o component")
   .option("-e, --input-enabling-only", "only run input enabling component")
   .option("-j, --json", "only usable with --pifra-only to get JSON output")
-  .option("-p, --prune", "remove all states/transitions added in eye-oh");
+  .option("-p, --prune", "remove all states/transitions added in eye-oh")
+  .option("-v, --visualise", "use SUT/Tomte tools to visualise automata");
 
 program.parse(process.argv);
 
@@ -72,6 +76,15 @@ if (!fs.existsSync(inputModelPath)) {
     if (finalModel) {
       utils.writeXMLModel(outputModelPath, finalModel);
       console.log("Wrote new model: " + outputModelName);
+    }
+
+    if (options.visualise) {
+      await exec(
+        `NAME="${outputModelName.replace(
+          ".register.xml",
+          ""
+        )}" && sut_register2uppaal $NAME.register.xml $NAME.xml && sut_uppaal2layoutformat $NAME.xml $NAME.pdf && open $NAME.pdf`
+      );
     }
   } catch (error) {
     console.log(error);
