@@ -9,54 +9,54 @@
 
     <state>
       <id>kk_1</id>
-      <available-registers> 
+      <available-registers>
         <register>1</register>
       </available-registers>
     </state>
-    
+
     <state>
       <id>s0</id>
-      <available-registers> 
+      <available-registers>
         <register>1</register>
         <register>2</register>
       </available-registers>
     </state>
-    
+
     <state>
       <id>s2</id>
-      <available-registers> 
+      <available-registers>
         <register>1</register>
         <register>2</register>
       </available-registers>
     </state>
-    
+
     <state>
       <id>s3</id>
-      <available-registers> 
+      <available-registers>
         <register>1</register>
         <register>2</register>
       </available-registers>
     </state>
-    
+
     <state>
       <id>s4</id>
-      <available-registers> 
+      <available-registers>
         <register>1</register>
         <register>2</register>
       </available-registers>
     </state>
-    
+
     <state>
       <id>s1</id>
-      <available-registers> 
+      <available-registers>
         <register>1</register>
         <register>2</register>
       </available-registers>
     </state>
-    
+
     <state>
       <id>s5</id>
-      <available-registers> 
+      <available-registers>
         <register>1</register>
         <register>2</register>
       </available-registers>

@@ -86,6 +86,9 @@ function deqConverter(JSONModel) {
     JSONModel
   );
 
+  const ITauRegister = "10000"; // remember that it will be incremented by 1 in learned models
+  registers.push(ITauRegister); // add dummy register for ITau transitions to read off
+
   const isLearnedModel = transitions.find((transition) => {
     if (transition.assignments.length > 0) {
       return transition.assignments[0].to.includes("-1000");
@@ -143,14 +146,30 @@ ${registerStrings}
     (transition) => transition.symbol !== "ISet" && transition.symbol !== "ITau"
   );
 
+  const ITauStrings = ITau.map((transition) => {
+    const register = isLearnedModel ? parseInt(ITauRegister) + 1 : ITauRegister;
+    return `
+    <transition>
+      <from>${transition.from}</from>
+      <input>ITau</input>
+      <op>Read</op>
+      <register>${register}</register>
+      <to>${transition.to}</to>
+    </transition>\n`;
+  })
+    .join("")
+    .trim();
+
   let startingSetState = 0;
-  const ISetStrings = ISet.assignments
-    .map((assignment, i) => {
+  const ISetStrings = registers
+    .map((reg, i) => {
+      if (reg === ITauRegister) {
+        return null;
+      }
+
       const startState = i === 0 ? initialState.name : "kk_" + startingSetState;
       const endState =
-        i === ISet.assignments.length - 1
-          ? ISet.to
-          : `kk_${startingSetState + 1}`;
+        i === registers.length - 1 ? ISet.to : `kk_${startingSetState + 1}`;
 
       startingSetState++;
 
@@ -163,10 +182,11 @@ ${registerStrings}
       <to>${endState}</to>
     </transition>\n`;
     })
+    .filter((v) => v !== null)
     .join("")
     .trim();
 
-  const ISetLocations = Array(ISet.assignments.length - 1)
+  const ISetLocations = Array(registers.length - 1)
     .fill(null)
     .map((loc, i) => {
       return `    <state>
@@ -201,6 +221,8 @@ ${initialStateString}
     ${ISetStrings}
 
     ${transitionStrings}
+
+    ${ITauStrings}
   </transitions>
 </dra>`;
 

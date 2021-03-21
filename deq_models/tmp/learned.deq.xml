@@ -3,69 +3,73 @@
 <dra>
   <states>
     <state>
-      <id>kk_0</id>
+      <id>s0</id>
       <available-registers />
     </state>
 
     <state>
       <id>kk_1</id>
-      <available-registers>
+      <available-registers> 
         <register>1</register>
       </available-registers>
     </state>
-
+    
     <state>
-      <id>s0</id>
-      <available-registers>
-        <register>1</register>
+      <id>kk_2</id>
+      <available-registers> 
         <register>2</register>
       </available-registers>
     </state>
-
-    <state>
-      <id>s2</id>
-      <available-registers>
-        <register>1</register>
-        <register>2</register>
-      </available-registers>
-    </state>
-
+    
     <state>
       <id>s3</id>
-      <available-registers>
+      <available-registers> 
         <register>1</register>
         <register>2</register>
+        <register>10001</register>
       </available-registers>
     </state>
-
+    
     <state>
-      <id>s4</id>
-      <available-registers>
+      <id>s2</id>
+      <available-registers> 
         <register>1</register>
         <register>2</register>
+        <register>10001</register>
       </available-registers>
     </state>
-
+    
     <state>
       <id>s1</id>
-      <available-registers>
+      <available-registers> 
         <register>1</register>
         <register>2</register>
+        <register>10001</register>
       </available-registers>
     </state>
-
+    
     <state>
       <id>s5</id>
-      <available-registers>
+      <available-registers> 
         <register>1</register>
         <register>2</register>
+        <register>10001</register>
+      </available-registers>
+    </state>
+    
+    <state>
+      <id>s4</id>
+      <available-registers> 
+        <register>1</register>
+        <register>2</register>
+        <register>10001</register>
       </available-registers>
     </state>
   </states>
-  <initial-state>kk_0</initial-state>
+  <initial-state>s0</initial-state>
   <transitions>
     <transition>
-      <from>kk_0</from>
+      <from>s0</from>
       <input>ISet</input>
       <op>LFresh</op>
       <register>1</register>
@@ -77,9 +81,8 @@
       <input>ISet</input>
       <op>LFresh</op>
       <register>2</register>
-      <to>s2</to>
+      <to>kk_2</to>
     </transition>
-
 
     <transition>
       <from>s2</from>
@@ -142,6 +145,14 @@
       <input>IFreshSend</input>
       <op>LFresh</op>
       <register>1</register>
+      <to>s1</to>
+    </transition>
+
+    <transition>
+      <from>s2</from>
+      <input>ITau</input>
+      <op>Read</op>
+      <register>10001</register>
       <to>s1</to>
     </transition>
   </transitions>
