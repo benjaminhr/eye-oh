@@ -172,7 +172,10 @@ function parseLTS(LTS) {
     ],
     locations,
     transitions,
-    registerCount,
+    registers: Array(registerCount)
+      .fill(null)
+      .map((_, i) => `r${i + 1}`),
+    registerSymbol: "r",
   };
 
   return RA;

@@ -1,10 +1,9 @@
 const XMLHelpers = require("./XMLHelpers");
 
 function prune(registerAutomaton) {
-  const inputs = XMLHelpers.get.symbols(registerAutomaton, "inputs");
-  const outputs = XMLHelpers.get.symbols(registerAutomaton, "output");
-  const locations = XMLHelpers.get.locations(registerAutomaton);
-  const transitions = XMLHelpers.get.transitions(registerAutomaton);
+  const { inputs, outputs, locations, transitions, registers } = XMLHelpers.all(
+    registerAutomaton
+  );
 
   // Remove locations
   const addedLocationNames = ["m"];
@@ -22,7 +21,7 @@ function prune(registerAutomaton) {
   // Remove outputs
   const addedOutputNames = ["OOK", "OFinal", "ODummy"];
   const newOutputs = outputs
-    .filter((output) => !removedOutputNames.includes(output.name))
+    .filter((output) => !addedOutputNames.includes(output.name))
     .map((output) => ({
       name: output.name,
       params: output.param.map((p) => p.name),
@@ -59,15 +58,13 @@ function prune(registerAutomaton) {
     }
   }
 
-  const registerCount =
-    registerAutomaton["register-automaton"].globals[0].variable.length;
-
   const RA = {
     inputs: newInputs,
     outputs: newOutputs,
     locations: newLocations,
     transitions: newTransitions,
-    registerCount,
+    registers,
+    registerSymbol: registers[0][0],
   };
 
   return RA;

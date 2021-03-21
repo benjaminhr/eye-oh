@@ -6,6 +6,25 @@ module.exports = {
       if (!json["register-automaton"].alphabet[0].hasOwnProperty(type))
         return [];
 
+      // output property missing
+      if (
+        type === "outputs" &&
+        !json["register-automaton"].alphabet[0].hasOwnProperty("outputs")
+      ) {
+        json["register-automaton"].alphabet[0].outputs = [{ symbol: [] }];
+      }
+
+      if (
+        type == "outputs" &&
+        json["register-automaton"].alphabet[0].hasOwnProperty("outputs")
+      ) {
+        if (
+          typeof json["register-automaton"].alphabet[0].outputs[0] === "string"
+        ) {
+          json["register-automaton"].alphabet[0].outputs = [{ symbol: [] }];
+        }
+      }
+
       return json["register-automaton"].alphabet[0][type][0].symbol.map(
         (obj) => {
           return {
@@ -159,5 +178,25 @@ module.exports = {
         }
       );
     },
+  },
+
+  all: function (registerAutomaton) {
+    const inputs = this.get.symbols(registerAutomaton, "inputs");
+    const outputs = this.get.symbols(registerAutomaton, "outputs");
+    const locations = this.get.locations(registerAutomaton);
+    const transitions = this.get.transitions(registerAutomaton);
+    const registers = registerAutomaton[
+      "register-automaton"
+    ].globals[0].variable.map((g) => g["$"].name);
+
+    const RA = {
+      inputs,
+      outputs,
+      locations,
+      transitions,
+      registers,
+    };
+
+    return RA;
   },
 };

@@ -1,121 +1,107 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <register-automaton>
-   <alphabet>
-      <inputs>
-         <symbol name="IReceive">
-            <param type="int" name="p0"/>
-         </symbol>
-         <symbol name="ISend">
-            <param type="int" name="p0"/>
-         </symbol>
-         <symbol name="ITau"/>
-         <symbol name="ISet">
-            <param type="int" name="p0"/>
-         </symbol>
-      </inputs>
-      <outputs>
-         <symbol name="OFinal"/>
-         <symbol name="OOK"/>
-         <symbol name="ODummy"/>
-      </outputs>
-   </alphabet>
-   <constants>
-
-   </constants>
-   <globals>
-      <variable type="int" name="x0">-1</variable>
-   </globals>
-   <locations>
-      <location name="s3"/>
-      <location name="s2" initial="true"/>
-      <location name="s1"/>
-      <location name="s4"/>
-   </locations>
-   <transitions>
-      <transition from="s2" to="s3" symbol="IReceive" params="p0">
-         <guard>p0 == x0</guard>
-      </transition>
-      <!-- <transition from="m8" to="s3" symbol="OOK" /> -->
-      <transition from="s2" to="s1" symbol="ISend" params="p0">
-         <guard>p0 == x0</guard>
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition>
-      <!-- <transition from="m9" to="s1" symbol="ODummy" /> -->
-      <transition from="s2" to="s1" symbol="IReceive" params="p0">
-         <guard>p0 != x0</guard>
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition>
-      <!-- <transition from="m10" to="s1" symbol="ODummy" /> -->
-      <transition from="s2" to="s4" symbol="ISend" params="p0">
-         <guard>p0 != x0</guard>
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition>
-      <!-- <transition from="m11" to="s4" symbol="OOK" /> -->
-      <transition from="s2" to="s1" symbol="ITau">
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition>
-      <!-- <transition from="m12" to="s1" symbol="OFinal" /> -->
-      <!-- <transition from="s2" to="s1" symbol="ISet" params="p0">
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition> -->
-      <!-- <transition from="m13" to="s1" symbol="ODummy" /> -->
-      <transition from="s3" to="s1" symbol="IReceive" params="p0">
-         <guard>p0 == x0</guard>
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition>
-      <!-- <transition from="m14" to="s1" symbol="ODummy" /> -->
-      <transition from="s3" to="s1" symbol="ISend" params="p0">
-         <guard>p0 == x0</guard>
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition>
-      <!-- <transition from="m15" to="s1" symbol="ODummy" /> -->
-      <transition from="s3" to="s1" symbol="IReceive" params="p0">
-         <guard>p0 != x0</guard>
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition>
-      <!-- <transition from="m16" to="s1" symbol="ODummy" /> -->
-      <transition from="s3" to="s1" symbol="ISend" params="p0">
-         <guard>p0 != x0</guard>
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition>
-      <!-- <transition from="m17" to="s1" symbol="OFinal" /> -->
-      <transition from="s3" to="s1" symbol="ITau">
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition>
-      <!-- <transition from="m18" to="s1" symbol="ODummy" /> -->
-      <!-- <transition from="s3" to="s1" symbol="ISet" params="p0">
-         <assignments>
-            <assign to="x0">-1000000</assign>
-         </assignments>
-      </transition> -->
-      <!-- <transition from="m19" to="s1" symbol="ODummy" /> -->
-      <!-- <transition from="s4" to="s1" symbol="IReceive" params="p0"/> -->
-      <!-- <transition from="m20" to="s1" symbol="OFinal" /> -->
-      <!-- <transition from="s4" to="s1" symbol="ISend" params="p0"/> -->
-      <!-- <transition from="m21" to="s1" symbol="ODummy" /> -->
-      <!-- <transition from="s4" to="s1" symbol="ITau" /> -->
-      <!-- <transition from="m22" to="s1" symbol="ODummy" /> -->
-      <!-- <transition from="s4" to="s1" symbol="ISet" params="p0"/> -->
-      <!-- <transition from="m23" to="s1" symbol="ODummy" /> -->
-   </transitions>
+	<alphabet>
+		<inputs>
+			<symbol name="IKnownReceive">
+				<param name="p0" type="int" />
+				<param name="p1" type="int" />
+			</symbol>
+			<symbol name="IFreshReceive">
+				<param name="p0" type="int" />
+				<param name="p1" type="int" />
+			</symbol>
+			<symbol name="ISet">
+				<param name="p0" type="int" />
+			</symbol>
+			<symbol name="IKnownSend">
+				<param name="p0" type="int" />
+				<param name="p1" type="int" />
+			</symbol>
+			<symbol name="ITau">
+			</symbol>
+			<symbol name="IFreshSend">
+				<param name="p0" type="int" />
+				<param name="p1" type="int" />
+			</symbol>
+		</inputs>
+		<outputs>
+		</outputs>
+	</alphabet>
+	<globals>
+		<variable type="int" name="x0">0</variable>
+		<variable type="int" name="x1">0</variable>
+	</globals>
+	<locations>
+		<location name="s0" initial="true" />
+		<location name="s3" />
+		<location name="s2" />
+		<location name="s1" />
+		<location name="s5" />
+		<location name="s4" />
+	</locations>
+	<transitions>
+		<transition from="s0" to="s2" symbol="ISet" params="p0">
+			<assignments>
+				<assign to="p0">x0</assign>
+			</assignments>
+		</transition>
+		<transition from="s2" to="s3" symbol="IFreshReceive" params="p0,p1">
+			<guard>p0 == x0 &amp;&amp; p1 != x0
+			</guard>
+			<assignments>
+				<assign to="p1">x1</assign>
+			</assignments>
+		</transition>
+		<transition from="s2" to="s1" symbol="ITau"></transition>
+		<transition from="s2" to="s4" symbol="IFreshSend" params="p0,p1">
+			<guard>p0 == x0 &amp;&amp; p1 != x0
+			</guard>
+			<assignments>
+				<assign to="p1">x1</assign>
+			</assignments>
+		</transition>
+		<transition from="s2" to="s5" symbol="IKnownReceive" params="p0,p1">
+			<guard>p0 == x0 &amp;&amp; p1 == x0
+			</guard>
+		</transition>
+		<transition from="s3" to="s1" symbol="IFreshSend" params="p0,p1">
+			<guard>p0 == x0 &amp;&amp; p1 != x0 &amp;&amp; p1 != x1
+			</guard>
+			<assignments>
+				<assign to="-1000000">x0</assign>
+				<assign to="-1000000">x1</assign>
+			</assignments>
+		</transition>
+		<transition from="s4" to="s1" symbol="IFreshReceive" params="p0,p1">
+			<guard>p0 == x0 &amp;&amp; p1 != x0 &amp;&amp; p1 != x1
+			</guard>
+			<assignments>
+				<assign to="-1000000">x0</assign>
+				<assign to="-1000000">x1</assign>
+			</assignments>
+		</transition>
+		<transition from="s4" to="s1" symbol="IKnownReceive" params="p0,p1">
+			<guard>p0 == x0 &amp;&amp; p1 == x1
+			</guard>
+			<assignments>
+				<assign to="-1000000">x0</assign>
+				<assign to="-1000000">x1</assign>
+			</assignments>
+		</transition>
+		<transition from="s4" to="s1" symbol="IKnownReceive" params="p0,p1">
+			<guard>p0 == x0 &amp;&amp; p1 == x0
+			</guard>
+			<assignments>
+				<assign to="-1000000">x0</assign>
+				<assign to="-1000000">x1</assign>
+			</assignments>
+		</transition>
+		<transition from="s5" to="s1" symbol="IFreshSend" params="p0,p1">
+			<guard>p0 == x0 &amp;&amp; p1 != x0
+			</guard>
+			<assignments>
+				<assign to="-1000000">x0</assign>
+			</assignments>
+		</transition>
+	</transitions>
 </register-automaton>

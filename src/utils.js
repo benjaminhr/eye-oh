@@ -105,7 +105,7 @@ function formatXML(input, indent) {
   return xmlArr.join("\n");
 }
 
-function writePiCalcRA(path, RA, json = false) {
+function writeJSONRA(path, RA, json = false) {
   if (json) {
     return fs.writeFileSync(path, JSON.stringify(RA, null, 2), "utf-8");
   }
@@ -124,11 +124,9 @@ function writePiCalcRA(path, RA, json = false) {
       })
     : [];
 
-  const registers = Array(RA.registerCount)
-    .fill(null)
-    .map((r, i) => {
-      return `<variable type="int" name="r${i + 1}">0</variable>`;
-    });
+  const registers = RA.registers.map((r) => {
+    return `<variable type="int" name="${r}">0</variable>`;
+  });
 
   const locations = RA.locations.map((l, i) => {
     if (l.initial) {
@@ -195,5 +193,5 @@ module.exports = {
   getRegisterXML,
   parseString,
   writeXMLModel,
-  writePiCalcRA,
+  writeJSONRA,
 };

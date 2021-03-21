@@ -3,28 +3,19 @@
 <dra>
   <states>
     <state>
-      <id>s0</id>
+      <id>kk_0</id>
       <available-registers />
     </state>
 
     <state>
-      <id>k1</id>
+      <id>kk_1</id>
       <available-registers>
         <register>1</register>
-        <register>2</register>
       </available-registers>
     </state>
 
     <state>
-      <id>k0</id>
-      <available-registers>
-        <register>1</register>
-        <register>2</register>
-      </available-registers>
-    </state>
-
-    <state>
-      <id>s1</id>
+      <id>s0</id>
       <available-registers>
         <register>1</register>
         <register>2</register>
@@ -56,6 +47,14 @@
     </state>
 
     <state>
+      <id>s1</id>
+      <available-registers>
+        <register>1</register>
+        <register>2</register>
+      </available-registers>
+    </state>
+
+    <state>
       <id>s5</id>
       <available-registers>
         <register>1</register>
@@ -63,96 +62,87 @@
       </available-registers>
     </state>
   </states>
-
-  <initial-state>s0</initial-state>
-
+  <initial-state>kk_0</initial-state>
   <transitions>
     <transition>
-      <from>s0</from>
+      <from>kk_0</from>
       <input>ISet</input>
       <op>LFresh</op>
       <register>1</register>
-      <to>k1</to>
+      <to>kk_1</to>
     </transition>
 
     <transition>
-      <from>k1</from>
+      <from>kk_1</from>
       <input>ISet</input>
       <op>LFresh</op>
       <register>2</register>
-      <to>k0</to>
+      <to>s2</to>
     </transition>
 
-    <!-- <transition>
-      <from>k0</from>
-      <input>IReceive</input>
+
+    <transition>
+      <from>s2</from>
+      <input>IFreshReceive</input>
+      <op>LFresh</op>
+      <register>2</register>
+      <to>s3</to>
+    </transition>
+
+    <transition>
+      <from>s2</from>
+      <input>IFreshSend</input>
+      <op>LFresh</op>
+      <register>2</register>
+      <to>s4</to>
+    </transition>
+
+    <transition>
+      <from>s2</from>
+      <input>IKnownReceive</input>
+      <op>Read</op>
+      <register>1</register>
+      <to>s5</to>
+    </transition>
+
+    <transition>
+      <from>s3</from>
+      <input>IFreshSend</input>
+      <op>LFresh</op>
+      <register>2</register>
+      <to>s1</to>
+    </transition>
+
+    <transition>
+      <from>s4</from>
+      <input>IFreshReceive</input>
+      <op>LFresh</op>
+      <register>2</register>
+      <to>s1</to>
+    </transition>
+
+    <transition>
+      <from>s4</from>
+      <input>IKnownReceive</input>
+      <op>Read</op>
+      <register>2</register>
+      <to>s1</to>
+    </transition>
+
+    <transition>
+      <from>s4</from>
+      <input>IKnownReceive</input>
       <op>Read</op>
       <register>1</register>
       <to>s1</to>
     </transition>
 
     <transition>
-      <from>k0</from>
-      <input>IReceive</input>
-      <op>LFresh</op>
-      <register>2</register>
-      <to>s2</to>
-    </transition>
-
-    <transition>
-      <from>k0</from>
-      <input>ISend</input>
-      <op>LFresh</op>
-      <register>2</register>
-      <to>s3</to>
-    </transition>
-
-    <transition>
-      <from>s0</from>
-      <input>ITau</input>
-      <op>Read</op>
-      <register>2</register>
-      <to>s3</to>
-    </transition>
-
-    <transition>
-      <from>s1</from>
-      <input>ISend</input>
+      <from>s5</from>
+      <input>IFreshSend</input>
       <op>LFresh</op>
       <register>1</register>
-      <to>s4</to>
+      <to>s1</to>
     </transition>
-
-    <transition>
-      <from>s2</from>
-      <input>ISend</input>
-      <op>LFresh</op>
-      <register>1</register>
-      <to>s5</to>
-    </transition>
-
-    <transition>
-      <from>s3</from>
-      <input>IReceive</input>
-      <op>Read</op>
-      <register>1</register>
-      <to>s5</to>
-    </transition>
-
-    <transition>
-      <from>s3</from>
-      <input>IReceive</input>
-      <op>Read</op>
-      <register>2</register>
-      <to>s5</to>
-    </transition>
-
-    <transition>
-      <from>s3</from>
-      <input>IReceive</input>
-      <op>LFresh</op>
-      <register>1</register>
-      <to>s5</to>
-    </transition> -->
   </transitions>
 </dra>

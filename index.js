@@ -2,14 +2,7 @@ const fs = require("fs");
 const util = require("util");
 const path = require("path");
 const { program } = require("commander");
-const child_process = require("child_process");
-const exec = util.promisify(child_process.exec);
-
-const utils = require("./src/utils");
-const inputEnable = require("./src/inputEnable");
-const addAlternatingIO = require("./src/addAlternatingIO");
-const FRAtoRA = require("./src/FRAtoRA");
-const prune = require("./src/prune");
+const commands = require("./src/commands");
 
 program
   .requiredOption("-i, --input <path>", "path to input model")
@@ -19,7 +12,8 @@ program
   .option("-e, --input-enabling-only", "only run input enabling component")
   .option("-j, --json", "only usable with --pifra-only to get JSON output")
   .option("-p, --prune", "remove all states/transitions added in eye-oh")
-  .option("-v, --visualise", "use SUT/Tomte tools to visualise automata");
+  .option("-v, --visualise", "use SUT/Tomte tools to visualise automata")
+  .option("-d, --deq-converter", "convert model into deq XML format");
 
 program.parse(process.argv);
 
@@ -39,52 +33,20 @@ if (!fs.existsSync(inputModelPath)) {
 // entrypoint
 (async () => {
   try {
-    let finalModel;
-
-    if (options.conversionOnly) {
-      console.log("ONLY RUNNING PIFRA FRA TO RA CONVERSION");
-      const RA = await FRAtoRA(inputModelPath);
-      utils.writePiCalcRA(outputModelPath, RA, options.json);
-    } else if (options.alternatingOnly) {
-      console.log("ONLY RUNNING ALTERNATING I/O COMPONENT");
-      const JSONModel = await utils.getRegisterXML(inputModelPath);
-      finalModel = addAlternatingIO(JSONModel);
-    } else if (options.inputEnablingOnly) {
-      console.log("ONLY RUNNING INPUT ENABLING COMPONENT");
-      const JSONModel = await utils.getRegisterXML(inputModelPath);
-      finalModel = inputEnable(JSONModel);
-    } else if (options.prune) {
-      console.log("ONLY RUNNING PRUNING COMPONENT");
-      const JSONModel = await utils.getRegisterXML(inputModelPath);
-      const RA = prune(JSONModel);
-      utils.writePiCalcRA(outputModelPath, RA);
+    if (options.deqConverter) {
+      await commands.convertToDeq({
+        options,
+        outputModelName,
+        outputModelPath,
+        inputModelPath,
+      });
     } else {
-      if (!inputModelPath.endsWith(".pi")) {
-        console.log(`Error: Input model file does not have extension .pi`);
-        process.exit(1);
-      }
-
-      // full complete run with all components
-      const RA = await FRAtoRA(inputModelPath);
-      utils.writePiCalcRA(outputModelPath, RA);
-
-      const JSONModel = await utils.getRegisterXML(outputModelPath);
-      finalModel = addAlternatingIO(JSONModel);
-      finalModel = inputEnable(JSONModel);
-    }
-
-    if (finalModel) {
-      utils.writeXMLModel(outputModelPath, finalModel);
-      console.log("Wrote new model: " + outputModelName);
-    }
-
-    if (options.visualise) {
-      await exec(
-        `NAME="${outputModelName.replace(
-          ".register.xml",
-          ""
-        )}" && sut_register2uppaal $NAME.register.xml $NAME.xml && sut_uppaal2layoutformat $NAME.xml $NAME.pdf && open $NAME.pdf`
-      );
+      await commands.runInputModel({
+        options,
+        outputModelName,
+        outputModelPath,
+        inputModelPath,
+      });
     }
   } catch (error) {
     console.log(error);

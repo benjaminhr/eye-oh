@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+	<register-automaton>
+		<alphabet>
+			<inputs>
+				<symbol name="ISet">
+					<param name="x1" type="int" />
+				</symbol>
+				<symbol name="ITau">
+				</symbol>
+				<symbol name="IKnownSend">
+					<param name="x1" type="int" />
+					<param name="x2" type="int" />
+				</symbol>
+				<symbol name="IKnownReceive">
+					<param name="x1" type="int" />
+					<param name="x2" type="int" />
+				</symbol>
+				<symbol name="IFreshSend">
+					<param name="x1" type="int" />
+					<param name="x2" type="int" />
+				</symbol>
+				<symbol name="IFreshReceive">
+					<param name="x1" type="int" />
+					<param name="x2" type="int" />
+				</symbol>
+			</inputs>
+			<outputs>
+			</outputs>
+		</alphabet>
+		<globals>
+			<variable type="int" name="r1">0</variable>
+			<variable type="int" name="r2">0</variable>
+		</globals>
+		<locations>
+			<location name="kk_0" initial="true" />
+			<location name="s0" />
+			<location name="s2" />
+			<location name="s3" />
+			<location name="s4" />
+			<location name="s1" />
+			<location name="s5" />
+		</locations>
+		<transitions>
+			<transition from="kk_0" to="s0" symbol="ISet" params="x1">
+				<assignments>
+					<assign to="r1">x1</assign>
+					<assign to="r2">x1</assign>
+				</assignments>
+			</transition>
+			<transition from="s0" to="s1" symbol="IKnownReceive" params="x1,x2">
+				<guard>r1==x1 &amp;&amp; r1==x2
+				</guard>
+			</transition>
+			<transition from="s0" to="s2" symbol="IFreshReceive" params="x1,x2">
+				<guard>r1==x1 &amp;&amp; (r1!=x2 &amp;&amp; r2!=x2)
+				</guard>
+				<assignments>
+					<assign to="r2">x2</assign>
+				</assignments>
+			</transition>
+			<transition from="s0" to="s3" symbol="IFreshSend" params="x1,x2">
+				<guard>r1==x1 &amp;&amp; (r1!=x2 &amp;&amp; r2!=x2)
+				</guard>
+				<assignments>
+					<assign to="r2">x2</assign>
+				</assignments>
+			</transition>
+			<transition from="s0" to="s4" symbol="ITau"></transition>
+			<transition from="s1" to="s4" symbol="IFreshSend" params="x1,x2">
+				<guard>r1==x1 &amp;&amp; (r1!=x2 &amp;&amp; r2!=x2)
+				</guard>
+				<assignments>
+					<assign to="r1">x2</assign>
+				</assignments>
+			</transition>
+			<transition from="s2" to="s5" symbol="IFreshSend" params="x1,x2">
+				<guard>r1==x1 &amp;&amp; (r1!=x2 &amp;&amp; r2!=x2)
+				</guard>
+				<assignments>
+					<assign to="r1">x2</assign>
+				</assignments>
+			</transition>
+			<transition from="s3" to="s5" symbol="IKnownReceive" params="x1,x2">
+				<guard>r1==x1 &amp;&amp; r1==x2
+				</guard>
+			</transition>
+			<transition from="s3" to="s5" symbol="IKnownReceive" params="x1,x2">
+				<guard>r1==x1 &amp;&amp; r2==x2
+				</guard>
+			</transition>
+			<transition from="s3" to="s5" symbol="IFreshReceive" params="x1,x2">
+				<guard>r1==x1 &amp;&amp; (r1!=x2 &amp;&amp; r2!=x2)
+				</guard>
+				<assignments>
+					<assign to="r1">x2</assign>
+				</assignments>
+			</transition>
+		</transitions>
+	</register-automaton>
