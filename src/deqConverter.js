@@ -1,8 +1,77 @@
 const fs = require("fs");
-const { start } = require("repl");
 const XMLHelpers = require("./XMLHelpers");
 
-function getTransitionStrings(transitions, registerSymbol, isLearnedModel) {
+function getChannelTransitionStrings(
+  locations,
+  transitions,
+  registerSymbol,
+  isLearnedModel
+) {
+  let channelTransitionString = "";
+  let channelStateCounter = 0; // vv_${}
+  const channelTransitions = []; // [{ for: 's1', channel: 'x1', state_name: vv_something }]
+
+  for (const location of locations) {
+    const outGoingTransitionNames = transitions.filter(
+      (transition) => transition.from === location.name
+    );
+
+    for (const transition of outGoingTransitionNames) {
+      const channelGuard = transition.guard.split("&&")[0];
+      const regex = new RegExp(
+        `(${registerSymbol}\\d+)(?!.*${registerSymbol}\\d+)`,
+        "g"
+      );
+      const match = regex.exec(channelGuard);
+
+      if (!match) {
+        console.log("could not find channel for ", transition);
+      }
+
+      const channel = match[0].match(/\d/g).join("");
+      const channelTransition = channelTransitions.find(
+        (c) => c.channel === channel && c.for === location.name
+      );
+
+      if (!channelTransition) {
+        const newTransition = {
+          for: location.name,
+          channel,
+          state_name: `vv_${channelStateCounter++}`,
+        };
+        channelTransitions.push(newTransition);
+        transition.from = newTransition.state_name;
+      } else {
+        transition.from = channelTransition.state_name;
+      }
+    }
+  }
+
+  for (const channelTransition of channelTransitions) {
+    channelNumber = isLearnedModel
+      ? parseInt(channelTransition.channel) + 1
+      : channelTransition.channel;
+
+    channelTransitionString += `
+    <transition>
+      <from>${channelTransition.for}</from>
+      <input>CheckChannel</input>
+      <op>Read</op>
+      <register>${channelNumber}</register>
+      <to>${channelTransition.state_name}</to>
+    </transition>\n`;
+  }
+
+  return { string: channelTransitionString, mappings: channelTransitions };
+}
+
+function getTransitionStrings(
+  locations,
+  transitions,
+  registerSymbol,
+  isLearnedModel,
+  channelNameMappings
+) {
   const otherTransitionStrings = transitions
     .map((transition) => {
       let transitionType; // LFresh GFresh Read
@@ -82,9 +151,7 @@ function getTransitionStrings(transitions, registerSymbol, isLearnedModel) {
 }
 
 function deqConverter(JSONModel) {
-  const { inputs, locations, transitions, registers } = XMLHelpers.all(
-    JSONModel
-  );
+  let { inputs, locations, transitions, registers } = XMLHelpers.all(JSONModel);
 
   const ITauRegister = "10000"; // remember that it will be incremented by 1 in learned models
   registers.push(ITauRegister); // add dummy register for ITau transitions to read off
@@ -108,6 +175,40 @@ function deqConverter(JSONModel) {
       <id>${initialState.name}</id>
       <available-registers />
     </state>`;
+
+  const newRegisterMapping = {};
+  if (registers.find((reg) => reg.includes("local_"))) {
+    let lastGoodRegisterIndex = 0;
+    for (let i = 0; i < registers.length; i++) {
+      if (registers[i].includes("local_")) {
+        // the index of the last register that doesn't have local_
+        lastGoodRegisterIndex = i - 1;
+      }
+    }
+
+    let newRegisterCounter = parseInt(
+      registers[lastGoodRegisterIndex].match(/\d/g).join("")
+    );
+
+    registers = registers.map((reg) => {
+      if (reg.includes("local_")) {
+        const newRegisterName = `x${lastGoodRegisterIndex++}`;
+        newRegisterMapping[reg] = newRegisterName;
+        return newRegisterName;
+      }
+
+      return reg;
+    });
+  }
+
+  // change transition assignments if there are local_X registers
+  for (let transition of transitions) {
+    for (let assignment of transition.assignments) {
+      if (assignment.to.includes("local_")) {
+        assignment.to = newRegisterMapping[assignment.to];
+      }
+    }
+  }
 
   const registerStrings = registers
     .map((register) => {
@@ -186,7 +287,7 @@ ${registerStrings}
     .join("")
     .trim();
 
-  const ISetLocations = Array(registers.length - 1)
+  const ISetStates = Array(registers.length - 1)
     .fill(null)
     .map((loc, i) => {
       return `    <state>
@@ -200,7 +301,28 @@ ${registerStrings}
     .join("\n")
     .trim();
 
+  const channelTransitions = getChannelTransitionStrings(
+    locations,
+    otherTransitions,
+    registerSymbol,
+    isLearnedModel
+  );
+
+  const channelStates = channelTransitions.mappings
+    .map((obj) => {
+      return `    <state>
+      <id>${obj.state_name}</id>
+      <available-registers> 
+${registerStrings}
+      </available-registers>
+    </state>
+  `;
+    })
+    .join("\n")
+    .trim();
+
   const transitionStrings = getTransitionStrings(
+    locations,
     otherTransitions,
     registerSymbol,
     isLearnedModel
@@ -212,13 +334,17 @@ ${registerStrings}
   <states>
 ${initialStateString}
 
-    ${ISetLocations}
+    ${ISetStates}
     
     ${stateStrings}
+
+    ${channelStates}
   </states>
   <initial-state>${initialState.name}</initial-state>
   <transitions>
     ${ISetStrings}
+
+    ${channelTransitions.string}
 
     ${transitionStrings}
 

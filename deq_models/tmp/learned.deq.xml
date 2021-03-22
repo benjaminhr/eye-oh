@@ -65,6 +65,42 @@
         <register>10001</register>
       </available-registers>
     </state>
+
+    <state>
+      <id>vv_0</id>
+      <available-registers> 
+        <register>1</register>
+        <register>2</register>
+        <register>10001</register>
+      </available-registers>
+    </state>
+  
+    <state>
+      <id>vv_1</id>
+      <available-registers> 
+        <register>1</register>
+        <register>2</register>
+        <register>10001</register>
+      </available-registers>
+    </state>
+  
+    <state>
+      <id>vv_2</id>
+      <available-registers> 
+        <register>1</register>
+        <register>2</register>
+        <register>10001</register>
+      </available-registers>
+    </state>
+  
+    <state>
+      <id>vv_3</id>
+      <available-registers> 
+        <register>1</register>
+        <register>2</register>
+        <register>10001</register>
+      </available-registers>
+    </state>
   </states>
   <initial-state>s0</initial-state>
   <transitions>
@@ -84,8 +120,42 @@
       <to>kk_2</to>
     </transition>
 
+    
+    <transition>
+      <from>s3</from>
+      <input>CheckChannel</input>
+      <op>Read</op>
+      <register>1</register>
+      <to>vv_0</to>
+    </transition>
+
     <transition>
       <from>s2</from>
+      <input>CheckChannel</input>
+      <op>Read</op>
+      <register>1</register>
+      <to>vv_1</to>
+    </transition>
+
+    <transition>
+      <from>s5</from>
+      <input>CheckChannel</input>
+      <op>Read</op>
+      <register>1</register>
+      <to>vv_2</to>
+    </transition>
+
+    <transition>
+      <from>s4</from>
+      <input>CheckChannel</input>
+      <op>Read</op>
+      <register>1</register>
+      <to>vv_3</to>
+    </transition>
+
+
+    <transition>
+      <from>vv_1</from>
       <input>IFreshReceive</input>
       <op>LFresh</op>
       <register>2</register>
@@ -93,7 +163,7 @@
     </transition>
 
     <transition>
-      <from>s2</from>
+      <from>vv_1</from>
       <input>IFreshSend</input>
       <op>LFresh</op>
       <register>2</register>
@@ -101,7 +171,7 @@
     </transition>
 
     <transition>
-      <from>s2</from>
+      <from>vv_1</from>
       <input>IKnownReceive</input>
       <op>Read</op>
       <register>1</register>
@@ -109,7 +179,7 @@
     </transition>
 
     <transition>
-      <from>s3</from>
+      <from>vv_0</from>
       <input>IFreshSend</input>
       <op>LFresh</op>
       <register>2</register>
@@ -117,7 +187,7 @@
     </transition>
 
     <transition>
-      <from>s4</from>
+      <from>vv_3</from>
       <input>IFreshReceive</input>
       <op>LFresh</op>
       <register>2</register>
@@ -125,7 +195,7 @@
     </transition>
 
     <transition>
-      <from>s4</from>
+      <from>vv_3</from>
       <input>IKnownReceive</input>
       <op>Read</op>
       <register>2</register>
@@ -133,7 +203,7 @@
     </transition>
 
     <transition>
-      <from>s4</from>
+      <from>vv_3</from>
       <input>IKnownReceive</input>
       <op>Read</op>
       <register>1</register>
@@ -141,7 +211,7 @@
     </transition>
 
     <transition>
-      <from>s5</from>
+      <from>vv_2</from>
       <input>IFreshSend</input>
       <op>LFresh</op>
       <register>1</register>
