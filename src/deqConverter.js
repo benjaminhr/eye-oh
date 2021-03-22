@@ -87,7 +87,10 @@ function getTransitionStrings(
       const assignments = transition.assignments;
       if (assignments.length !== 0) {
         // using learned model which throws registers away
-        if (assignments[0].to.includes("-10000")) {
+        if (
+          assignments[0].to.includes("-10000") ||
+          assignments[0].reg.includes("local_")
+        ) {
           // get last register from guard
           const guards = transition.guard.split("&&");
           const lastGuard = guards[guards.length - 1].replace(")", "");
@@ -176,39 +179,43 @@ function deqConverter(JSONModel) {
       <available-registers />
     </state>`;
 
-  const newRegisterMapping = {};
   if (registers.find((reg) => reg.includes("local_"))) {
-    let lastGoodRegisterIndex = 0;
-    for (let i = 0; i < registers.length; i++) {
-      if (registers[i].includes("local_")) {
-        // the index of the last register that doesn't have local_
-        lastGoodRegisterIndex = i - 1;
-      }
-    }
-
-    let newRegisterCounter = parseInt(
-      registers[lastGoodRegisterIndex].match(/\d/g).join("")
-    );
-
-    registers = registers.map((reg) => {
-      if (reg.includes("local_")) {
-        const newRegisterName = `x${lastGoodRegisterIndex++}`;
-        newRegisterMapping[reg] = newRegisterName;
-        return newRegisterName;
-      }
-
-      return reg;
-    });
+    registers = registers.filter((reg) => !reg.includes("local_"));
   }
 
-  // change transition assignments if there are local_X registers
-  for (let transition of transitions) {
-    for (let assignment of transition.assignments) {
-      if (assignment.to.includes("local_")) {
-        assignment.to = newRegisterMapping[assignment.to];
-      }
-    }
-  }
+  // const newRegisterMapping = {};
+  // if (registers.find((reg) => reg.includes("local_"))) {
+  //   let lastGoodRegisterIndex = 0;
+  //   for (let i = 0; i < registers.length; i++) {
+  //     if (registers[i].includes("local_")) {
+  //       // the index of the last register that doesn't have local_
+  //       lastGoodRegisterIndex = i - 1;
+  //     }
+  //   }
+
+  //   let newRegisterCounter = parseInt(
+  //     registers[lastGoodRegisterIndex].match(/\d/g).join("")
+  //   );
+
+  //   registers = registers.map((reg) => {
+  //     if (reg.includes("local_")) {
+  //       const newRegisterName = `x${lastGoodRegisterIndex++}`;
+  //       newRegisterMapping[reg] = newRegisterName;
+  //       return newRegisterName;
+  //     }
+
+  //     return reg;
+  //   });
+  // }
+
+  // // change transition assignments if there are local_X registers
+  // for (let transition of transitions) {
+  //   for (let assignment of transition.assignments) {
+  //     if (assignment.to.includes("local_")) {
+  //       assignment.to = newRegisterMapping[assignment.to];
+  //     }
+  //   }
+  // }
 
   const registerStrings = registers
     .map((register) => {
