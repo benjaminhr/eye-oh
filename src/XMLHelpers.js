@@ -59,8 +59,8 @@ module.exports = {
             params: transInfo.params ? transInfo.params : "",
             assignments: transition.assignments
               ? transition.assignments[0].assign.map((ass) => ({
-                  reg: ass["_"],
-                  to: ass["$"].to,
+                  reg: ass["$"].to,
+                  to: ass["_"],
                 }))
               : [],
             guard: transition.guard ? transition.guard[0].trim() : "",
