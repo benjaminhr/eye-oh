@@ -1,0 +1,7 @@
+Stack(push, pop, next) =
+    push(top).($newNext.(newNext'<top>.0 | Stack(push, pop, newNext)))
+  + pop(r).next(top).(r'<top>.0 | Stack(push, pop, newNext))
+
+Client(res) = pu'<a>.pu'<b>.pu'<c>.po'<res>.po'<res>.0
+
+$bot.Stack(pu, po, bot) | Client(output)
