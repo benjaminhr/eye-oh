@@ -57,7 +57,9 @@ function parseLTS(LTS) {
 
     if (!containsLocation(locations, fromLocation)) {
       locations.push({ name: fromLocation });
-    } else if (!containsLocation(locations, toLocation)) {
+    }
+
+    if (!containsLocation(locations, toLocation)) {
       locations.push({ name: toLocation });
     }
 
