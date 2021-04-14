@@ -10,6 +10,7 @@ const addAlternatingIO = require("./addAlternatingIO");
 const FRAtoRA = require("./FRAtoRA");
 const prune = require("./prune");
 const deqConverter = require("./deqConverter");
+const isDeterministic = require("./determinismChecker");
 
 async function runInputModel({
   options,
@@ -36,6 +37,9 @@ async function runInputModel({
     const JSONModel = await utils.getRegisterXML(inputModelPath);
     const RA = prune(JSONModel);
     utils.writeJSONRA(outputModelPath, RA);
+  } else if (options.deterministic) {
+    const JSONModel = await utils.getRegisterXML(inputModelPath);
+    isDeterministic(JSONModel); // prints error if not deterministic
   } else {
     if (!inputModelPath.endsWith(".pi")) {
       console.log(`Error: Input model file does not have extension .pi`);
@@ -47,6 +51,8 @@ async function runInputModel({
     utils.writeJSONRA(outputModelPath, RA);
 
     const JSONModel = await utils.getRegisterXML(outputModelPath);
+    const deterministic = isDeterministic(JSONModel); // prints error if not deterministic
+
     finalModel = addAlternatingIO(JSONModel);
     finalModel = inputEnable(JSONModel);
   }

@@ -13,7 +13,8 @@ program
   .option("-j, --json", "only usable with --pifra-only to get JSON output")
   .option("-p, --prune", "remove all states/transitions added in eye-oh")
   .option("-v, --visualise", "use SUT/Tomte tools to visualise automata")
-  .option("-d, --deq-converter", "convert model into deq XML format");
+  .option("-d, --deq-converter", "convert model into deq XML format")
+  .option("--deterministic", "check if model is deterministic");
 
 program.parse(process.argv);
 

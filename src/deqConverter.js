@@ -183,40 +183,6 @@ function deqConverter(JSONModel) {
     registers = registers.filter((reg) => !reg.includes("local_"));
   }
 
-  // const newRegisterMapping = {};
-  // if (registers.find((reg) => reg.includes("local_"))) {
-  //   let lastGoodRegisterIndex = 0;
-  //   for (let i = 0; i < registers.length; i++) {
-  //     if (registers[i].includes("local_")) {
-  //       // the index of the last register that doesn't have local_
-  //       lastGoodRegisterIndex = i - 1;
-  //     }
-  //   }
-
-  //   let newRegisterCounter = parseInt(
-  //     registers[lastGoodRegisterIndex].match(/\d/g).join("")
-  //   );
-
-  //   registers = registers.map((reg) => {
-  //     if (reg.includes("local_")) {
-  //       const newRegisterName = `x${lastGoodRegisterIndex++}`;
-  //       newRegisterMapping[reg] = newRegisterName;
-  //       return newRegisterName;
-  //     }
-
-  //     return reg;
-  //   });
-  // }
-
-  // // change transition assignments if there are local_X registers
-  // for (let transition of transitions) {
-  //   for (let assignment of transition.assignments) {
-  //     if (assignment.to.includes("local_")) {
-  //       assignment.to = newRegisterMapping[assignment.to];
-  //     }
-  //   }
-  // }
-
   const registerStrings = registers
     .map((register) => {
       register = parseInt(register.match(/\d/g).join(""));
