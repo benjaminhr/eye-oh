@@ -1,12 +1,6 @@
 # eye-oh
 
-(Update readme, now each component can be run individually or a pi-calc process can be passed and everything is done for you)
-
-(Update readme, mention all binaries needed in path sut_uppaal2register (and other sut binaries), tomte_learn, sut_run, pifra, deq)
-
-(Update readme, with good lines for visualising input model and output models)
-
-Convert an XML register automata (RA) into an [input enabled](https://en.wikipedia.org/wiki/Input/output_automaton) RA comptatible with Tomte.
+A set of tools for converting π-calculus processes into Register Automata in XML. Each component can be run in isolation or the whole pipeline can be run at once. Additionally, there exists a tool for converting Register Automata from [Tomte's XML format](https://tomte.cs.ru.nl/Tomte-0-41/Description) to [DEQ's XML format](https://github.com/stersay/deq). [Pifra](https://github.com/sengleung/pifra) is used to convert π-calculus processes to a labelled transition representing FRAs.
 
 ### Notes about input model
 
@@ -24,5 +18,4 @@ Convert an XML register automata (RA) into an [input enabled](https://en.wikiped
 ### usage
 
 - take one of the relevant binaries from the `dist` folder and place it in path or `/usr/local/bin`
-- `eye-oh <input_model_name> <output_model_name>`
 - `eye-oh --help` to list all available commands
