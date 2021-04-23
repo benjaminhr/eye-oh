@@ -1,0 +1,3 @@
+Q(a) =  a(x).$y.( x'<y>.0 | b(z).[z=y] Q(a) )
+P(x) = a'<x>.P(b) + b(y).P(y)
+$x.P(x) | $a.P(a) | $b.Q(b) | $c.Q(c) | $d.Q(d)

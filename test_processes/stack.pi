@@ -1,5 +1,0 @@
-Stack(push, pop, next) =
-      push(top).($newNext.(newNext'<top>.0 | Stack(push, pop, newNext) ))
-    + pop(r).next(top).(r'<top>.0 | Stack(push, pop, newNext))
- 
-Stack(push, pop, bot) | push'<a>.push'<b>.push'<c>.pop'<res>.pop'<res>.0
