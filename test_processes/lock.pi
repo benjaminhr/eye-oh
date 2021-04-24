@@ -1,0 +1,4 @@
+Lock(l,false,true) = l'<true>.l'<false>.0
+P(p,pp,y,z) = $lock.(Lock(lock,ff,tt) | $a.$ok.ar'<a>.a'<lock>.a'<ok>.ok(x).z'<x>.0)
+
+P(p,k,y,z)

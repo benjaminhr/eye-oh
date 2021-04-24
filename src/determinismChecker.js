@@ -16,7 +16,9 @@ function isDeterministic(JSONModel) {
       if (transitions.hasOwnProperty(symbol)) {
         if (symbol.includes("IKnown")) {
           const transitionExists = transitions[symbol].find(
-            (existingTran) => existingTran.guard === transition.guard
+            (existingTran) =>
+              existingTran.guard === transition.guard &&
+              existingTran.from !== transition.to
           );
 
           if (transitionExists) {
@@ -27,7 +29,7 @@ function isDeterministic(JSONModel) {
           const transitionExists = transitions[symbol].find((existingTran) => {
             const g1 = existingTran.guard.split("&&")[0];
             const g2 = transition.guard.split("&&")[0];
-            return g1 === g2;
+            return g1 === g2 && existingTran.from !== transition.to;
           });
 
           if (transitionExists) {

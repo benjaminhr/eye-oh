@@ -1,0 +1,4 @@
+M(a,r,w) = r'<a>.M(a,r,w) + w(b).M(b,r,w)
+N(a,r,w) = r'<a>.N(a,r,w) + w(b).([a=b]N(a,r,w) + N(b,r,w))
+
+N(a,r,w) | M(a,r,w)
