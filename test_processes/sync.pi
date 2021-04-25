@@ -1,0 +1,5 @@
+S0(l,p) = l(w).w(n).w(z).$i.n'<i>.$i.$z0.p'<i>.i'<n>.i'<z0>.z0(n).z'<n>.S0(l,p)
+A0(l) = $z.(Z(z) | S0(l,z))
+T0(l) = $o.(A0(o) | S0(l,o))
+
+A0(l) | T0(l)

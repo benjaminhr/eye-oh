@@ -27,3 +27,5 @@ Below we can see a high level overview of all the components and their relevant 
 
 - take one of the relevant binaries from the `dist` folder and place it in path or `/usr/local/bin`
 - `eye-oh --help` to list all available commands
+- `deq-helper.sh` is used to in the `output` directory with a `learnedConcreteModel.xml` and a `test_processes/temp.pi` to produce deq models (handles all pruning, converting, etc).
+

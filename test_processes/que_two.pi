@@ -1,0 +1,3 @@
+Q(p,pp,y,z) = a'<p>.Q(p,pp,y,z) | (a(x).z'<x>.0 + b(x).y'<x>.Q(p,pp,y,z))
+
+$p.Q(p,pp,y,z)
