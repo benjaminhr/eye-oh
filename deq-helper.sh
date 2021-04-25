@@ -1,7 +1,7 @@
 #!/usr/bin/env sh 
 
 node ../index \
---input ../test_processes/temp.pi  \
+--input ../test_processes/"$1".pi  \
 --output temp_og.register.xml \
 --conversion-only
 
