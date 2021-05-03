@@ -99,16 +99,16 @@ function parseLTS(LTS) {
         }
 
         newTransition.guard += ")";
+
+        newTransition.assignments.push({
+          reg: `r${value}`,
+          to: "x2",
+        });
       } else {
         // known
         newTransition.symbol = "IKnownSend";
         newTransition.guard += ` && r${value}==x2`;
       }
-
-      newTransition.assignments.push({
-        reg: `r${value}`,
-        to: "x2",
-      });
     } else if (FRATransition.includes("t")) {
       newTransition.symbol = "ITau";
     } else {

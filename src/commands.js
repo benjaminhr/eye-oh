@@ -51,7 +51,7 @@ async function runInputModel({
     utils.writeJSONRA(outputModelPath, RA);
 
     const JSONModel = await utils.getRegisterXML(outputModelPath);
-    const deterministic = isDeterministic(JSONModel); // prints error if not deterministic
+    // const deterministic = isDeterministic(JSONModel); // prints error if not deterministic
 
     finalModel = addAlternatingIO(JSONModel);
     finalModel = inputEnable(JSONModel);
