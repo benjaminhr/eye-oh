@@ -1,13 +1,13 @@
 #!/usr/bin/env sh 
 
-node ../index \
---input ../test_processes/"$1".pi  \
+eye-oh \
+--input ../processes/"$1".pi  \
 --output temp_og.register.xml \
 --conversion-only
 
 echo "Wrote og model"
 
-node ../index \
+eye-oh \
 --input temp_og.register.xml \
 --output tmp/input.deq.xml \
 --deq-converter
@@ -18,14 +18,14 @@ sut_uppaal2register learnedConcreteModel.xml learned.register.xml
 
 echo "Converted uppaal to xml"
 
-node ../index.js \
+eye-oh \
 --input learned.register.xml \
 --output learned_pruned.register.xml \
 --prune
 
 echo "Pruned learned model"
 
-node ../index \
+eye-oh \
 --input learned_pruned.register.xml \
 --output tmp/learned.deq.xml \
 --deq-converter

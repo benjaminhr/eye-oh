@@ -200,10 +200,10 @@ function deqConverter(JSONModel) {
   });
 
   let startingSetState = 0;
-  // const registersToSet = registers.filter((reg) => !reg.includes("local_"));
-  // registersToSet.push("");
-  const registersToSet = Array(parseInt(process.env.REGS) + 1).fill(null);
-  console.log("Regs to set with tau: " + registersToSet.length);
+  const registersToSet = registers.filter((reg) => !reg.includes("local_"));
+  registersToSet.push("");
+  // const registersToSet = Array(parseInt(process.env.REGS) + 1).fill(null);
+  // console.log("Regs to set with tau: " + registersToSet.length);
 
   const ISetTransitions = registersToSet
     .map((obj, i) => {

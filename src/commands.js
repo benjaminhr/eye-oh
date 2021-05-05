@@ -40,6 +40,13 @@ async function runInputModel({
   } else if (options.deterministic) {
     const JSONModel = await utils.getRegisterXML(inputModelPath);
     isDeterministic(JSONModel); // prints error if not deterministic
+  } else if (options.visualise) {
+    await exec(
+      `NAME="${outputModelName.replace(
+        ".register.xml",
+        ""
+      )}" && sut_register2uppaal $NAME.register.xml $NAME.xml && sut_uppaal2layoutformat $NAME.xml $NAME.pdf && open $NAME.pdf`
+    );
   } else {
     if (!inputModelPath.endsWith(".pi")) {
       console.log(`Error: Input model file does not have extension .pi`);
@@ -60,15 +67,6 @@ async function runInputModel({
   if (finalModel) {
     utils.writeXMLModel(outputModelPath, finalModel);
     console.log("Wrote new model: " + outputModelName);
-  }
-
-  if (options.visualise) {
-    await exec(
-      `NAME="${outputModelName.replace(
-        ".register.xml",
-        ""
-      )}" && sut_register2uppaal $NAME.register.xml $NAME.xml && sut_uppaal2layoutformat $NAME.xml $NAME.pdf && open $NAME.pdf`
-    );
   }
 }
 
